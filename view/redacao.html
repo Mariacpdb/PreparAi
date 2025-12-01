@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PreparAI - Redação</title>
+    
+    <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="styles/styles-redacao.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="img/books.png">
+    <link rel="icon" type="image/png" href="img/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="img/favicon.svg" />
+    <link rel="shortcut icon" href="img/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="PreparAI" />
+    <link rel="manifest" href="img/site.webmanifest" />
+</head>
+
+<body class="redacao-page">
+
+    <header id="main-header">
+        
+        <div class="header-left">
+            <nav id="menu-hamburguer">
+                <input type="checkbox" id="check">
+                <label for="check" class="checkbtn"><i class="fas fa-bars"></i></label>
+                <div class="nav-mobile">
+                    <a href="historico.html">Histórico/Exames</a>
+                    <a href="#">Configurações</a>
+                    <a href="#">Ajuda</a>
+                </div>
+            </nav>
+            <img src="img/pd.png" alt="Logo" class="header-logo">
+        </div>
+
+        <div class="header-center">
+            <div id="navigation-links">
+                <a href="home.html">INÍCIO</a>
+                <a href="simulado.html">SIMULADO</a>
+                <a href="redacao.html" class="active">REDAÇÃO</a> <a href="desempenho.html">DESEMPENHO</a>
+            </div>
+        </div>
+
+        <div class="header-right">
+            <div class="profile-header"> 
+                <img src="img/perfil.png" alt="perfil" class="header-perfil">
+                
+                <div class="dropdown-menu">
+                    <a href="#" onclick="alert('Perfil em breve!')">Meu Perfil</a>
+                    <a href="#" onclick="logout()" class="logout-link">Sair <i class="fas fa-sign-out-alt"></i></a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container-redacao">
+        
+        <section class="tema-section">
+            <div class="section-header">
+                <h2><i class="fas fa-lightbulb"></i> Tema da Redação</h2>
+            </div>
+            
+            <div class="tema-content">
+                <h3 id="titulo-tema">Carregando tema...</h3>
+                <p id="texto-apoio">Utilize o tema acima ou gere um novo com Inteligência Artificial.</p>
+                
+                <button onclick="gerarNovoTema()" class="btn-secundario">
+                    <i class="fas fa-sync-alt"></i> Gerar Novo Tema com IA
+                </button>
+            </div>
+        </section>
+
+        <section class="area-escrita">
+            <div class="section-header">
+                <h2><i class="fas fa-pen-nib"></i> Escreva sua Redação</h2>
+            </div>
+
+            <textarea id="texto-redacao" placeholder="Digite sua redação aqui..." rows="20"></textarea>
+            
+            <div class="divisor">OU</div>
+
+            <div class="upload-area">
+                <label for="input-foto" class="btn-upload">
+                    <i class="fas fa-camera"></i> Enviar Foto do Caderno
+                </label>
+                <input type="file" id="input-foto" accept="image/*" style="display: none;" onchange="mostrarPreview(this)">
+                <span id="nome-arquivo">Nenhum arquivo selecionado</span>
+            </div>
+
+            <img id="preview-img" class="hidden" style="max-width: 100%; margin-top: 15px; border-radius: 8px; border: 1px solid #ddd;">
+
+            <div class="action-area">
+                <button onclick="enviarParaCorrecao()" id="btn-enviar" class="btn-primario">
+                    Enviar para Correção <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </section>
+
+        <section id="resultado-correcao" class="hidden">
+            <div class="nota-final-banner">
+                <span>Sua Nota Final:</span>
+                <span id="nota-total-display">---</span>
+            </div>
+
+            <h3><i class="fas fa-comment-dots"></i> Comentário Geral</h3>
+            <div id="feedback-geral" class="feedback-box"></div>
+
+            <h3><i class="fas fa-list-ul"></i> Detalhamento por Competência</h3>
+            <div class="competencias-grid">
+                <div class="comp-card">
+                    <div class="comp-header"><span>C1: Gramática</span> <span id="nota-c1" class="badge-nota">-</span></div>
+                    <p id="detalhe-c1" class="comp-detalhe"></p>
+                </div>
+                <div class="comp-card">
+                    <div class="comp-header"><span>C2: Compreensão</span> <span id="nota-c2" class="badge-nota">-</span></div>
+                    <p id="detalhe-c2" class="comp-detalhe"></p>
+                </div>
+                <div class="comp-card">
+                    <div class="comp-header"><span>C3: Argumentação</span> <span id="nota-c3" class="badge-nota">-</span></div>
+                    <p id="detalhe-c3" class="comp-detalhe"></p>
+                </div>
+                <div class="comp-card">
+                    <div class="comp-header"><span>C4: Coesão</span> <span id="nota-c4" class="badge-nota">-</span></div>
+                    <p id="detalhe-c4" class="comp-detalhe"></p>
+                </div>
+                <div class="comp-card">
+                    <div class="comp-header"><span>C5: Proposta</span> <span id="nota-c5" class="badge-nota">-</span></div>
+                    <p id="detalhe-c5" class="comp-detalhe"></p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="practice-footer">
+        <p>Este é um projeto de faculdade. <a href="#">Saiba mais</a></p>
+    </footer>
+
+    <script src="../controller/api.js"></script>
+    <script src="../controller/redacao_controller.js"></script>
+    <script>
+        // Preview Simples da Imagem (Visual)
+        function mostrarPreview(input) {
+            const preview = document.getElementById('preview-img');
+            const nome = document.getElementById('nome-arquivo');
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.classList.remove('hidden');
+                }
+                reader.readAsDataURL(input.files[0]);
+                nome.innerText = input.files[0].name;
+            }
+        }
+
+        // Lógica do Menu Lateral
+        function logout() {
+        localStorage.removeItem('usuario');
+        window.location.href = "index.html";
+    }
+    </script>
+</body>
+</html>

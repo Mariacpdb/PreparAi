@@ -1,0 +1,56 @@
+const form = document.getElementById("loginForm");
+
+if (form) {
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const email = document.getElementById("email").value;
+        const senha = document.getElementById("senha").value;
+        const btn = form.querySelector('button');
+        const textoOriginal = btn.innerText;
+
+        btn.innerText = "Entrando...";
+        btn.disabled = true;
+
+        try {
+            const res = await fetch("http://localhost:5000/login", {
+                method: "POST",
+                headers: { 
+                    "Content-Type": "application/json; charset=UTF-8"
+                },
+                body: JSON.stringify({ email, senha })
+            });
+
+            
+            // Se a senha estiver errada, o Python manda 401
+            if (!res.ok) {
+                const txt = await res.json();
+                alert(txt.error || 'Erro no login');
+                return;
+            }
+
+            const data = await res.json();
+
+            // === AQUI ESTAVA O ERRO ===
+            // Antes estava 'data.success', mas o Python manda 'status': 'ok'
+            if (data.status === 'ok') {
+                // Salva o usuário no navegador
+                localStorage.setItem("usuario", JSON.stringify(data.user));
+                
+                alert("Login realizado com sucesso! Bem-vindo(a) " + data.user.nome);
+                window.location.href = "home.html"; // Redireciona para o chatbot
+            } else {
+                alert(data.error || 'Login falhou');
+            }
+
+        } catch (err) {
+            console.error('Erro:', err);
+            alert('Não foi possível conectar ao servidor.');
+        } finally {
+            btn.innerText = textoOriginal;
+             btn.disabled = false;
+        }
+    });
+} else {
+    console.warn('Formulário de login não encontrado');
+}

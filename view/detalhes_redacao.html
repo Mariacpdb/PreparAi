@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PreparAI - Correção</title>
+    
+    <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="styles/styles-redacao.css"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body style="background-color: #f8f9fa;">
+
+    <header id="main-header">
+        <div class="header-left">
+            <nav id="menu-hamburguer">
+                <input type="checkbox" id="check">
+                <label for="check" class="checkbtn"><i class="fas fa-bars"></i></label>
+                <div class="nav-mobile">
+                    <a href="historico.html">Voltar ao Histórico</a>
+                </div>
+            </nav>
+            <img src="img/pd.png" alt="Logo" class="header-logo">
+        </div>
+        <div class="header-center">
+            <div id="navigation-links">
+                <a href="home.html">INÍCIO</a>
+                <a href="simulado.html">SIMULADO</a>
+                <a href="redacao.html">REDAÇÃO</a>
+                <a href="desempenho.html">DESEMPENHO</a>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="profile-header"> 
+                <img src="img/perfil.png" alt="perfil" class="header-perfil">
+            </div>
+        </div>
+    </header>
+
+    <main class="redacao-container" style="margin-top: 40px;">
+        
+        <div style="margin-bottom: 30px;">
+            <a href="historico.html" style="text-decoration:none; color:#1d4e98; font-weight:bold;">
+                <i class="fas fa-arrow-left"></i> Voltar para Histórico
+            </a>
+            <h1 id="tema-titulo" style="font-family:'Poppins'; color:#1d4e98; margin-top:10px;">Carregando tema...</h1>
+            <p id="data-envio" style="color:#666;"></p>
+        </div>
+
+        <div class="correction-grid" style="display: grid; grid-template-columns: 2fr 1fr; gap: 30px;">
+            
+            <div class="student-text-box" style="background:white; padding:30px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.05);">
+                <h3 style="margin-bottom:20px; border-bottom:1px solid #eee; padding-bottom:10px;">Sua Redação</h3>
+                <p id="texto-completo" style="white-space: pre-wrap; line-height: 1.8; color:#333; font-family: 'Georgia', serif;">
+                    Carregando texto...
+                </p>
+            </div>
+
+            <div class="score-box">
+                <div id="resultado-correcao"> <div class="nota-final-box">
+                        <h3>Nota Final</h3>
+                        <div id="nota-total-display" class="nota-display">0</div>
+                    </div>
+
+                    <div class="feedback-box">
+                        <h4><i class="fas fa-comment-dots"></i> Feedback Geral</h4>
+                        <p id="feedback-geral">...</p>
+                    </div>
+
+                    <div class="competencias-list">
+                        <div class="comp-item"><span>C1: Norma Culta</span> <strong id="nota-c1">-</strong></div>
+                        <div class="comp-item"><span>C2: Tema e Estrutura</span> <strong id="nota-c2">-</strong></div>
+                        <div class="comp-item"><span>C3: Argumentação</span> <strong id="nota-c3">-</strong></div>
+                        <div class="comp-item"><span>C4: Coesão</span> <strong id="nota-c4">-</strong></div>
+                        <div class="comp-item"><span>C5: Proposta</span> <strong id="nota-c5">-</strong></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../controller/detalhes_redacao_controller.js"></script>
+</body>
+</html>

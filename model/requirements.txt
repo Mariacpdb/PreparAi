@@ -1,0 +1,12 @@
+Flask>=2.0
+Flask-SQLAlchemy>=3.0
+psycopg2-binary>=2.9
+python-dotenv>=0.21
+Flask-Cors>=3.0.10
+flask
+flask_cors
+requests
+openai
+psycopg2-binary
+bcrypt
+PyJWT

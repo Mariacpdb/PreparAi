@@ -1,0 +1,253 @@
+/* ==========================
+   IMPORTANDO FONTES CHIQUES
+   ========================== */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+/* ==========================
+   RESET GLOBAL
+   ========================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    /* Fonte padrão do corpo continua sendo a Segoe UI (boa leitura) */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+}
+
+/* ==========================
+   CABEÇALHO (Agora com Fonte Chique)
+   ========================== */
+#main-header {
+    background-color: #1d4e98;
+    height: 90px;
+    padding: 0 2rem;
+    
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15); /* Sombra mais elegante */
+    overflow: visible !important;
+}
+
+/* --- LADO ESQUERDO (Hambúrguer + Logo) --- */
+.header-left {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Espaço entre o hambúrguer e o logo */
+}
+
+/* Botão Hambúrguer (Estilo Integrado) */
+.checkbtn {
+    font-size: 1.5rem;
+    color: white;
+    cursor: pointer;
+    display: flex; /* Garante que apareça */
+    align-items: center;
+    transition: color 0.3s;
+}
+
+.checkbtn:hover {
+    color: #ffd700; /* Um destaque amarelo ao passar o mouse */
+}
+
+#check { display: none; } /* Esconde o checkbox real */
+
+/* Menu Lateral (Que abre ao clicar no hambúrguer) */
+/* ==========================
+   MENU LATERAL (COM ANIMAÇÃO)
+   ========================== */
+.nav-mobile {
+    /* REMOVIDO: display: none; (Isso matava a animação) */
+    display: block;
+    position: fixed;
+    top: 90px; /* Altura da barra */
+    
+    /* ESTADO INICIAL: Escondido para a esquerda */
+    left: -100%; 
+    
+    width: 250px;
+    height: calc(100vh - 70px);
+    background: #15386d;
+    
+    /* A MÁGICA: Transição suave de 0.4 segundos */
+    transition: left 0.4s ease;; 
+    
+    z-index: 10001; /* Fica acima de tudo */
+    padding-top: 20px;
+    box-shadow: 4px 0 15px rgba(0,0,0,0.3);
+}
+
+/* QUANDO ABERTO (O Checkbox faz a mágica via CSS) */
+#check:checked ~ .nav-mobile {
+    left: 0; /* Desliza para a tela */
+}
+
+/* Links do menu */
+.nav-mobile a {
+    display: block;
+    padding: 15px 25px;
+    color: white;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    font-size: 1rem;
+    transition: background 0.2s;
+}
+
+.nav-mobile a:hover {
+    background: rgba(255,255,255,0.15);
+    border-left: 4px solid #ffd700; /* Detalhe amarelo bonito */
+}
+
+/* Logo */
+.header-logo {
+    height: 50px;
+    width: auto;
+    object-fit: contain;
+}
+
+/* --- CENTRO (Menu Principal) --- */
+.header-center {
+    flex: 2;
+    display: flex;
+    justify-content: center;
+}
+
+#navigation-links {
+    display: flex;
+    gap: 2rem;
+}
+
+#navigation-links a {
+    color: rgba(255,255,255,0.95);
+    text-decoration: none;
+    
+    /* AQUI ESTÁ A FONTE NOVA: */
+    font-family: 'Poppins', sans-serif; 
+    font-weight: 600; /* Um pouco mais leve que o bold puro */
+    font-size: 0.9rem; /* Tamanho delicado */
+    
+    text-transform: uppercase;
+    letter-spacing: 1px; /* Espaçamento chique entre letras */
+    transition: all 0.3s;
+    position: relative;
+    padding-bottom: 5px;
+}
+
+#navigation-links a:hover, 
+#navigation-links a.active {
+    color: #ffffff;
+    /* Efeito de brilho/sombra no texto */
+    text-shadow: 0 0 10px rgba(255,255,255,0.4);
+}
+
+/* Linha animada mais fina */
+#navigation-links a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #ffd700; /* Dourado para dar um toque de luxo */
+    transition: width 0.3s ease;
+}
+
+#navigation-links a:hover::after,
+#navigation-links a.active::after {
+    width: 100%;
+}
+
+/* --- DIREITA (Perfil) --- */
+/* --- DIREITA (Perfil) --- */
+.header-right {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* CORREÇÃO AQUI: Mudado de .profile-container para .profile-header */
+.profile-header {
+    position: relative; /* Essencial para segurar o menu */
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-perfil {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255,255,255,0.5);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.header-perfil:hover {
+    border-color: #fff;
+    box-shadow: 0 0 10px rgba(255,255,255,0.4);
+}
+
+/* Dropdown Sair */
+.dropdown-menu {
+    display: none; /* Escondido por padrão */
+    position: absolute;
+    top: 55px;
+    right: 0;
+    background-color: white;
+    min-width: 150px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border-radius: 8px;
+    overflow: hidden;
+    z-index: 99999; /* Bem alto para ficar na frente de tudo */
+}
+
+/* O GATILHO: Agora usando o nome certo (.profile-header) */
+.profile-header:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu a {
+    display: block;
+    padding: 12px 16px;
+    color: #333;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: normal;
+    text-align: left;
+}
+
+.dropdown-menu a:hover { background: #f1f1f1; }
+.logout-link { color: #d32f2f !important; font-weight: bold; }
+
+.dropdown-menu::before {
+    content: "";
+    display: block;
+    position: absolute;
+    
+    /* Posiciona essa área invisível logo acima do menu */
+    bottom: 100%; 
+    left: 0;
+    width: 100%;
+    
+    /* Altura da ponte (cobre o espaço entre a foto e o menu) */
+    height: 30px; 
+    
+    background: transparent; /* É invisível, mas o mouse detecta */
+}
+/* Responsividade */
+@media (max-width: 850px) {
+    .header-center { display: none; } /* Esconde menu central no mobile */
+    /* No mobile, usamos o hamburger para tudo */
+}

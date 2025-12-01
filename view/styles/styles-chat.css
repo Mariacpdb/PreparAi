@@ -1,0 +1,134 @@
+/* ==========================
+   Chat Message Styles
+   ========================== */
+
+.message {
+    /* ... mantenha o que já tem ... */
+    
+    /* ADICIONE ISSO PARA DAR RESPIRO */
+    padding: 20px;  /* Espaço interno em todos os lados */
+    line-height: 1.6; /* Melhora a leitura do texto */
+    border-radius: 12px; /* Arredonda os cantos se quiser */
+}
+
+/* Se quiser diferenciar o Bot */
+.message.bot {
+    /* Essa é a cor verdinha da sua imagem. 
+       Se não for exatamente essa, troque o código #dcf8c6 pelo seu. */
+    background-color: #dcf8c6; 
+    
+    /* Mantém o espaçamento interno para não ficar colado */
+    padding: 20px; 
+    
+    /* Arredonda os cantos */
+    border-radius: 15px;
+    border-top-left-radius: 0; /* (Opcional) Faz aquele biquinho do balão */
+    
+    /* Garante que o texto fique legível */
+    color: #333; 
+    line-height: 1.5;
+    
+    /* Ajuste de margem */
+    margin-bottom: 15px;
+    max-width: 80%; /* Para não ocupar a tela toda */
+    align-self: flex-start; /* Garante que fique na esquerda */
+}
+
+/* Se tiver listas dentro da mensagem do bot, isso arruma a margem delas */
+.message.bot ul, .message.bot ol {
+    margin-left: 25px;
+    margin-top: 10px;
+}
+
+.message p {
+    margin-bottom: 10px; /* Espaço entre parágrafos */
+}
+
+
+.home-container {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-top: 80px; /* Espaço para o menu header não ficar em cima */
+        }
+
+        /* 3. A CAIXA DO CHAT (PAI) */
+        .chat-area {
+            /* Tamanho fixo: 85% da altura da tela */
+            height: 85vh !important; 
+            width: 100% !important;
+            max-width: 1400px !important;
+            
+            display: flex !important;
+            flex-direction: column !important;
+            
+            background: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            
+            /* --- MUDANÇA AQUI: Borda Azul em volta de tudo --- */
+            border: 2px solid #004aad !important; 
+            
+            overflow: hidden !important; 
+            position: relative;
+        }
+
+        /* 4. A LISTA DE MENSAGENS (FILHO QUE ROLA) */
+        #chatMessages {
+            /* Ocupa todo o espaço livre */
+            flex: 1 !important; 
+            
+            /* Cria a barra de rolagem APENAS aqui dentro */
+            overflow-y: auto !important; 
+            
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            
+            /* Garante que o scroll funcione */
+            height: 100%; 
+        }
+
+        /* 5. A ÁREA DE DIGITAR (FILHO FIXO) */
+        .chat-input-wrapper {
+            flex-shrink: 0 !important; 
+            background: #fff;
+            padding: 15px;
+            
+            /* --- MUDANÇA AQUI: A linha de cima agora é AZUL para fechar a caixa --- */
+            border-top: 2px solid #004aad !important; 
+            
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chat-input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 20px;
+            border: 1px solid #ccc;
+            resize: none;
+        }
+        
+        /* Tira a borda azul feia quando clica para digitar */
+        .chat-input:focus {
+            outline: 2px solid #004aad;
+            border-color: transparent;
+        }
+
+        .send-btn {
+            background: #004aad;
+            color: white;
+            border: none;
+            padding: 12px 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: background 0.3s;
+        }
+        .send-btn:hover {
+            background: #003580;
+        }

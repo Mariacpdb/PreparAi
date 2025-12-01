@@ -1,0 +1,205 @@
+/* ==========================
+   1. LAYOUT DA PÁGINA HOME
+   ========================== */
+.home-container {
+    width: 90%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding-top: 40px;
+    padding-bottom: 120px; /* Espaço para o chat não cobrir o rodapé */
+    display: flex;
+    flex-direction: column;
+    min-height: 80vh; /* Garante que o conteúdo ocupe a tela */
+}
+
+/* ==========================
+   2. BOAS VINDAS
+   ========================== */
+.welcome-section {
+    width: 100%;
+    margin-bottom: 30px;
+    text-align: left;
+}
+
+.welcome-section h2 {
+    color: #1d4e98;
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    color: #666;
+    font-size: 1rem;
+}
+
+/* ==========================
+   3. CARDS DE KPI (VOLTANDO AO VISUAL BOM)
+   ========================== */
+.kpi-container {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    margin-bottom: 30px;
+    flex-wrap: wrap; /* Responsivo */
+}
+
+.kpi-card {
+    background: white; /* Fundo branco essencial */
+    flex: 1;
+    min-width: 250px;
+    padding: 1.5rem;
+    border-radius: 12px;
+    
+    /* Sombra e Borda iguais à foto que você gostou */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
+    border: 1px solid #e0e0e0;
+    
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    transition: transform 0.2s;
+}
+
+.kpi-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+/* Ícones redondos azuis */
+.kpi-card i {
+    font-size: 1.8rem;
+    color: #1d4e98;
+    background: #eef4fb;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.kpi-info h3 {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #666;
+    font-weight: 600;
+}
+
+.kpi-info span {
+    display: block;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #1d4e98;
+}
+
+/* ==========================
+   4. ÁREA DE CHAT (A CAIXA GRANDE)
+   ========================== */
+.chat-area {
+    width: 100%;
+    flex: 1; /* Ocupa o resto do espaço vertical */
+    background: white; /* FUNDO BRANCO PARA NÃO SUMIR */
+    border-radius: 12px;
+    border: 1px solid #e0e0e0; /* Borda cinza suave */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+    
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    min-height: 70vh; /* Garante altura mínima visual */
+    position: relative;
+    margin-bottom: 120px;
+}
+
+.chat-messages {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    overflow-y: auto; /* Permite rolar as mensagens dentro da caixa */
+    padding-bottom: 20px;
+}
+
+/* Estilo dos Balões */
+.message {
+    padding: 12px 18px;
+    border-radius: 10px;
+    max-width: 80%;
+    line-height: 1.5;
+    word-wrap: break-word;
+}
+
+.message.user {
+    align-self: flex-end;
+    background-color: #1d4e98 !important;
+    color: #ffffff !important;
+    font-weight: 600;
+    border-bottom-right-radius: 2px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+
+.message.bot {
+    align-self: flex-start;
+    background-color: #f1f3f5;
+    color: #333;
+    border: 1px solid #e0e0e0;
+    border-bottom-left-radius: 2px;
+}
+
+/* ==========================
+   5. INPUT FLUTUANTE (O QUE VAI JUNTO COM O MOUSE)
+   ========================== */
+.chat-input-wrapper {
+    /* MÁGICA DO FIXO: */
+    position: fixed; 
+    bottom: 20px; 
+    left: 50%;
+    transform: translateX(-50%); /* Centraliza */
+    
+    width: 90%;
+    max-width: 1360px; /* Ajuste para alinhar com a margem do container */
+    
+    background: white;
+    padding: 10px;
+    border-radius: 12px;
+    
+    /* Sombra forte para destacar do fundo */
+    box-shadow: 0 -5px 20px rgba(0,0,0,0.1); 
+    border: 1px solid #1d4e98; /* Borda azul para destacar */
+    
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 100;
+}
+
+.chat-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    padding: 10px;
+    resize: none;
+    max-height: 100px;
+    font-family: inherit;
+    background: transparent;
+}
+
+.send-btn {
+    background-color: #1d4e98;
+    color: white;
+    width: 45px;
+    height: 45px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s;
+}
+
+.send-btn:hover {
+    background-color: #15386d;
+}

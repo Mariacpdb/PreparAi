@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="./styles/styles.css">
+        <link rel="stylesheet" href="styles/styles-login.css">
+        <link rel="icon" type="image/png" href="img/books.png">
+        <link rel="icon" type="image/png" href="img/favicon-96x96.png" sizes="96x96" />
+        <link rel="icon" type="image/svg+xml" href="img/favicon.svg" />
+        <link rel="shortcut icon" href="img/favicon.ico" />
+        <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png" />
+        <meta name="apple-mobile-web-app-title" content="PreparAI" />
+        <link rel="manifest" href="img/site.webmanifest" />
+        <title>PreparAI</title>
+        <link rel="icon" type="image/png" href="img/book_711189.png">
+    </head>
+    
+    <body class="login-page">
+        <main class="login-container">
+            <img src="img/PreparaAI.png" alt="">
+            <h2>Inteligência Artificial auxiliar para vestibulandos</h2>
+
+            <form id="loginForm" class="login-form" action="#" method="post" novalidate>
+                <label for="email" class="sr-only">Seu email</label>
+                <input type="email" id="email" name="email" placeholder="Email">
+
+                <label for="senha" class="sr-only">Senha</label>
+                <input type="password" id="senha" name="senha" placeholder="Senha">
+
+                <div class="actions">
+                <button type="submit" class="btn primary">Entrar</button>
+                <a href="registro.html" class="btn primary" style="text-decoration: none; text-align: center; display: inline-block;">Cadastre-se</a>
+            </div>
+            
+            <div id="note-1">
+             <p class="site-note">Olá! Este site é uma Inteligência Artificial para te ajudar nos estudos do ENEM. Tenha em mente que não sou um professor e posso ocasionalmente cometer erros.</p>
+            </div>
+
+            </form>
+
+        </main>
+
+        <script src="../controller/login.js"></script>
+        <a href="home.html" class="debug-link">Debug</a>
+    </body>
+</html>

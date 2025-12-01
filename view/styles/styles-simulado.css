@@ -1,0 +1,272 @@
+/* ==========================
+   LAYOUT GERAL
+   ========================== */
+.practice-container {
+    width: 100%;
+    min-height: 80vh;
+    padding-top: 40px;
+    padding-bottom: 50px;
+    background-color: #f8f9fa;
+}
+
+.simulado-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1.5rem;
+}
+
+/* Utilitário para esconder telas */
+.hidden {
+    display: none !important;
+}
+
+/* ==========================
+   TELA 1: INTRODUÇÃO (Tela de Iniciar)
+   ========================== */
+.intro-section {
+    text-align: center;
+    background: white;
+    padding: 3rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    border: 1px solid #e0e0e0;
+    max-width: 800px;
+    margin: 40px auto;
+}
+
+.intro-content h1 {
+    color: #1d4e98;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    font-weight: 800;
+}
+
+.intro-content p {
+    color: #555;
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+}
+
+.intro-details {
+    color: #888;
+    font-size: 0.9rem;
+    margin-bottom: 30px !important;
+}
+
+.btn-start {
+    background-color: #1d4e98;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 15px 40px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.3s;
+    box-shadow: 0 4px 15px rgba(29, 78, 152, 0.3);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-start:hover {
+    background-color: #15386d;
+    transform: scale(1.05);
+}
+
+/* ==========================
+   CABEÇALHO DA REVISÃO (O que faltava!)
+   ========================== */
+.intro-text {
+    text-align: left;
+    
+    /* ESPAÇO GRANDE PARA NÃO FICAR COLADO */
+    margin-bottom: 60px !important; 
+    padding-bottom: 30px;
+    border-bottom: 1px solid #e0e0e0;
+    width: 100%;
+}
+
+.intro-text h1 {
+    /* FONTE CHIQUÉ */
+    font-family: 'Poppins', sans-serif; 
+    color: #1d4e98;
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+    letter-spacing: -0.5px;
+}
+
+.intro-text p {
+    color: #666;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+}
+
+/* Botão de Voltar (Revisão) */
+.intro-text a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: #1d4e98;
+    font-weight: 600;
+    background: white;
+    padding: 8px 16px;
+    border: 1px solid #1d4e98;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+}
+
+.intro-text a:hover {
+    background-color: #1d4e98;
+    color: white;
+    transform: translateX(-5px);
+}
+
+/* ==========================
+   TELA 2: PROVA (GRID DE QUESTÕES)
+   ========================== */
+.prova-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.prova-header h2 { color: #1d4e98; margin: 0; }
+
+.badge-tempo {
+    background: #eef4fb;
+    color: #1d4e98;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+.questions-area {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-bottom: 30px;
+    margin-top: 20px; /* Garante que não cole no topo */
+}
+
+/* Card da Pergunta */
+.question-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    border: 1px solid rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    transition: transform 0.2s;
+}
+
+.question-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.question-title {
+    font-size: 1.2rem;
+    color: #1d4e98;
+    font-weight: 700;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.question-text {
+    font-size: 1rem;
+    color: #444;
+    line-height: 1.5;
+}
+
+/* LISTA DE OPÇÕES (Estilizada e Interativa) */
+.options-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* Espaço entre opções */
+}
+
+.options-list label {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 12px 15px; /* Mais gordinho */
+    border: 1px solid #eee;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    font-size: 1rem;
+    color: #333;
+    background-color: white;
+}
+
+/* Efeito Hover (Azulzinho ao passar o mouse) */
+.options-list label:hover {
+    background-color: #eef4fb;
+    border-color: #1d4e98;
+    transform: translateX(5px);
+}
+
+/* --- ESTILOS DE CORREÇÃO (REVISÃO) --- */
+.option-correct {
+    background-color: #d4edda !important;
+    border: 1px solid #28a745 !important;
+    color: #155724 !important;
+    font-weight: 600;
+}
+
+.option-wrong {
+    background-color: #f8d7da !important;
+    border: 1px solid #dc3545 !important;
+    color: #721c24 !important;
+}
+
+/* Na revisão, tira a mãozinha mas mantem o visual */
+.options-list.readonly label {
+    cursor: default;
+}
+
+/* Botão Finalizar */
+.action-area {
+    text-align: right;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #ddd;
+}
+
+.btn-primary {
+    background: #28a745;
+    color: #fff;
+    border: none;
+    padding: 15px 35px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-primary:hover { background: #218838; }
+
+/* Footer */
+.practice-footer {
+    text-align: center;
+    padding: 2rem;
+    color: #888;
+    background: white;
+    border-top: 1px solid #eee;
+}
+
+.practice-footer a { color: #1d4e98; text-decoration: none; font-weight: bold; }

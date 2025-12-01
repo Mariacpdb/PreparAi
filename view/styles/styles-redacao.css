@@ -1,0 +1,396 @@
+/* ==========================
+   LAYOUT DA PÁGINA REDAÇÃO
+   ========================== */
+
+/* Fundo padrão cinza claro */
+body.redacao-page {
+    background-color: #f8f9fa;
+}
+
+.container-redacao {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    
+    /* Espaço essencial para o cabeçalho fixo não cobrir o conteúdo */
+    padding-top: 40px; 
+    padding-bottom: 50px;
+    padding-left: 20px;
+    padding-right: 20px;
+    
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 80vh;
+}
+
+/* --- BLOCOS BRANCOS (CARDS) --- */
+section {
+    background: #fff;
+    padding: 2rem;
+    margin-bottom: 30px;
+    border-radius: 12px;
+    /* Sombra consistente com o resto do site */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+/* Cabeçalhos das Seções */
+.section-header {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.section-header h2 {
+    color: #1d4e98; /* Azul principal */
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Área do Tema */
+.tema-content {
+    text-align: center;
+}
+
+#titulo-tema {
+    font-size: 1.3rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+#texto-apoio {
+    color: #666;
+    margin-bottom: 20px;
+}
+
+/* --- ÁREA DE ESCRITA --- */
+textarea {
+    width: 100%;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1.1rem; /* Fonte confortável para ler */
+    font-family: inherit;
+    resize: vertical;
+    box-sizing: border-box;
+    background-color: #fafafa;
+    line-height: 1.6;
+    transition: border-color 0.3s, background-color 0.3s;
+}
+
+textarea:focus {
+    border-color: #1d4e98;
+    background-color: #fff;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(29, 78, 152, 0.1);
+}
+
+/* Divisor "OU" */
+.divisor {
+    text-align: center;
+    margin: 30px 0;
+    font-weight: bold;
+    color: #999;
+    position: relative;
+}
+
+.divisor::before, .divisor::after {
+    content: "";
+    display: inline-block;
+    width: 40%;
+    height: 1px;
+    background: #e0e0e0;
+    vertical-align: middle;
+    margin: 0 10px;
+}
+
+/* Upload de Imagem */
+.upload-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 30px;
+    border: 2px dashed #d0d7de; /* Borda tracejada elegante */
+    border-radius: 12px;
+    background-color: #f9f9f9;
+    transition: background-color 0.3s;
+}
+
+.upload-area:hover {
+    background-color: #f0f4f8;
+    border-color: #1d4e98;
+}
+
+#nome-arquivo {
+    font-size: 0.9rem;
+    color: #666;
+    font-style: italic;
+}
+
+/* Botões */
+.btn-primario {
+    background-color: #28a745; /* Verde para ação principal */
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: bold;
+    width: 100%;
+    margin-top: 20px;
+    transition: background 0.3s, transform 0.2s;
+    box-shadow: 0 4px 10px rgba(40, 167, 69, 0.2);
+}
+
+.btn-primario:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+}
+
+.btn-secundario {
+    background-color: white;
+    color: #1d4e98;
+    border: 2px solid #1d4e98;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-secundario:hover {
+    background-color: #1d4e98;
+    color: white;
+}
+
+.btn-upload {
+    background-color: #1d4e98;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.3s;
+}
+
+.btn-upload:hover { background-color: #15386d; }
+
+/* --- RESULTADOS --- */
+.hidden { display: none; }
+
+.nota-final-banner {
+    text-align: center;
+    background: #eef4fb; /* Azulzinho muito claro */
+    padding: 30px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    border: 1px solid #d0e1f5;
+}
+
+#nota-total-display {
+    font-size: 4rem;
+    font-weight: 800;
+    display: block;
+    margin-top: 10px;
+    color: #1d4e98;
+}
+
+.feedback-box {
+    background: #fcfcfc;
+    padding: 15px;
+    border-left: 4px solid #1d4e98;
+    margin-bottom: 20px;
+    color: #444;
+    line-height: 1.6;
+}
+
+/* Grid de Competências */
+.competencias-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 15px;
+}
+
+.comp-card {
+    border: 1px solid #eee;
+    padding: 15px;
+    border-radius: 8px;
+    background: #fafafa;
+}
+
+.comp-header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+}
+
+.badge-nota {
+    background: #1d4e98;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+}
+
+.comp-detalhe {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0;
+}
+
+/* Footer (Igual aos outros) */
+.practice-footer {
+    text-align: center;
+    padding: 2rem;
+    color: #888;
+    background: white;
+    border-top: 1px solid #eee;
+}
+
+.practice-footer a { color: #1d4e98; text-decoration: none; font-weight: bold; }
+
+.redacao-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    min-height: 100vh;
+}
+
+/* O GRID MÁGICO: Divide a tela em Texto (65%) e Notas (35%) */
+.correction-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr; /* 2 partes esquerda, 1 parte direita */
+    gap: 30px;
+    align-items: start; /* Alinha no topo */
+}
+
+/* Caixa do Texto do Aluno (Esquerda) */
+.student-text-box {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    border: 1px solid #e0e0e0;
+}
+
+#texto-completo {
+    white-space: pre-wrap; /* Mantém os parágrafos originais */
+    line-height: 1.8;
+    color: #2c3e50;
+    font-family: 'Georgia', 'Times New Roman', serif; /* Fonte estilo jornal/livro */
+    font-size: 1.15rem;
+    text-align: justify;
+}
+
+/* Painel de Notas (Direita) - Fica fixo ao rolar */
+.score-box {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    border: 1px solid #e0e0e0;
+    
+    position: sticky; /* Faz o painel seguir a tela */
+    top: 20px; 
+    max-height: 90vh;
+    overflow-y: auto; /* Se a tela for pequena, cria barra de rolagem só na nota */
+}
+
+/* Nota Final Gigante */
+.nota-final-box {
+    text-align: center;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.nota-final-box h3 {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.nota-display {
+    font-size: 4.5rem;
+    font-weight: 800;
+    line-height: 1;
+    margin-top: 5px;
+}
+
+/* Cores das Notas */
+.nota-verde { color: #28a745 !important; }
+.nota-amarela { color: #ffc107 !important;  }
+.nota-vermelha { color: #dc3545 !important; }
+
+/* Lista de Competências Detalhada */
+.competencias-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Card de cada Competência */
+.comp-card {
+    background: #f8f9fa;
+    border-left: 4px solid #1d4e98; /* Barrinha azul na esquerda */
+    border-radius: 6px;
+    padding: 12px 15px;
+    transition: transform 0.2s;
+}
+
+.comp-card:hover {
+    background: #eef4fb;
+    transform: translateX(5px);
+}
+
+.comp-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    color: #1d4e98;
+    font-weight: bold;
+}
+
+.comp-score {
+    background: #1d4e98;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+}
+
+.comp-body p {
+    font-size: 0.85rem;
+    color: #555;
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* Responsividade para Celular */
+@media (max-width: 900px) {
+    .correction-grid {
+        grid-template-columns: 1fr; /* Vira uma coluna só */
+    }
+    
+    .score-box {
+        position: static; /* Para de seguir a tela no celular */
+        order: -1; /* Joga a nota para CIMA do texto no celular */
+        margin-bottom: 30px;
+    }
+}

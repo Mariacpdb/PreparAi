@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PreparAI - Simulado</title>
+    
+    <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="styles/styles-simulado.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="img/books.png">
+    <link rel="icon" type="image/png" href="img/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="img/favicon.svg" />
+    <link rel="shortcut icon" href="img/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="PreparAI" />
+    <link rel="manifest" href="img/site.webmanifest" />
+</head>
+
+<body class="practice-page">
+
+    <header id="main-header">
+        <div class="header-left">
+            <nav id="menu-hamburguer">
+                <input type="checkbox" id="check">
+                <label for="check" class="checkbtn"><i class="fas fa-bars"></i></label>
+                <div class="nav-mobile">
+                    <a href="historico.html">Histórico/Exames</a>
+                    <a href="#">Configurações</a>
+                    <a href="#">Ajuda</a>
+                </div>
+            </nav>
+            <img src="img/pd.png" alt="Logo" class="header-logo">
+        </div>
+
+        <div class="header-center">
+            <div id="navigation-links">
+                <a href="home.html">INÍCIO</a>  
+                <a href="simulado.html" class="active">SIMULADO</a> <a href="redacao.html">REDAÇÃO</a>
+                <a href="desempenho.html">DESEMPENHO</a>
+            </div>
+        </div>
+
+        <div class="header-right">
+            <div class="profile-header"> 
+                <img src="img/perfil.png" alt="perfil" class="header-perfil">
+                <div class="dropdown-menu">
+                    <a href="#" onclick="alert('Perfil em breve!')">Meu Perfil</a>
+                    <a href="#" onclick="logout()" class="logout-link">Sair <i class="fas fa-sign-out-alt"></i></a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="practice-container">
+        <div class="simulado-container">
+            
+            <section id="tela-intro" class="intro-section">
+                <div class="intro-content">
+                    <h1>Simulado ENEM</h1>
+                    <p>Teste seus conhecimentos com questões reais de provas anteriores.</p>
+                    <p class="intro-details">25 Questões • Tempo Livre • Correção Imediata</p>
+                    
+                    <button onclick="comecarSimulado()" class="btn-start">
+                        <i class="fas fa-play"></i> Iniciar Simulado
+                    </button>
+                </div>
+            </section>
+
+            <section id="tela-prova" class="hidden">
+                
+                <div class="prova-header">
+                    <h2>Em andamento...</h2>
+                    <span class="badge-tempo">Boa sorte!</span>
+                </div>
+
+                <div id="questionsArea" class="questions-area">
+                    <p style="text-align: center; color: #666; grid-column: 1/-1;">Carregando questões...</p>
+                </div>
+
+                <div class="action-area">
+                    <button id="btn-finalizar" class="btn-primary" onclick="concluirProva()">Finalizar Simulado</button>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="practice-footer">
+        <p>Este é um projeto de faculdade. <a href="#">Saiba mais</a></p>
+    </footer>
+
+    <script src="../controller/api.js"></script>
+    <script src="../controller/simulado_controller.js"></script>
+    <script>
+        // Função visual para trocar as telas
+        function comecarSimulado() {
+            document.getElementById('tela-intro').classList.add('hidden'); // Esconde intro
+            document.getElementById('tela-prova').classList.remove('hidden'); // Mostra prova
+            
+            // Chama a função do controller que busca as questões no banco
+            if (typeof iniciarProva === "function") {
+                iniciarProva(); 
+            }
+        }
+
+        // Menu Lateral & Logout
+        function logout() {
+        localStorage.removeItem('usuario');
+        window.location.href = "index.html";
+    }
+    </script>
+</body>
+</html>

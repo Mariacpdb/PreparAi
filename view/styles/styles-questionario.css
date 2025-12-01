@@ -1,0 +1,39 @@
+body {
+  background: #f5f5f5;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.container {
+  width: 90%;
+  max-width: 500px;
+  background: white;
+  padding: 24px;
+  border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+#pergunta {
+  font-size: 20px;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.opcao {
+  margin-bottom: 10px;
+  padding: 14px;
+  border-radius: 10px;
+  border: 2px solid #5a5af0;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.opcao:hover {
+  background: #5a5af0;
+  color: white;
+}
