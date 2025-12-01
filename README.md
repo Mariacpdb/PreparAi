@@ -1,7 +1,7 @@
 # 🧠 PreparAI  
 **Plataforma inteligente para estudos do ENEM com simulados, redação corrigida por IA, dashboard de desempenho e chatbot educacional.**
 
-Este projeto foi desenvolvido por mim e meus colegas como uma solução completa para auxiliar estudantes na preparação para o ENEM. A aplicação integra frontend em **JavaScript**, backend em **Flask (Python)** e banco de dados **PostgreSQL**, além de recursos avançados de **IA (OpenAI)** para análise de redação e interação via chatbot.
+Este projeto foi desenvolvido como uma solução completa para auxiliar vestibulandos na preparação para o ENEM. A aplicação integra frontend em **JavaScript**, backend em **Flask (Python)** e banco de dados **PostgreSQL**, além de recursos avançados de **IA (OpenAI)** para análise de redação e interação via chatbot.
 
 ---
 
@@ -28,7 +28,6 @@ Este projeto foi desenvolvido por mim e meus colegas como uma solução completa
 
 ### ✔️ Chatbot Educacional
 - Respostas inteligentes sobre estudos, conteúdos e explicações  
-- Registro de histórico por usuário  
 - Suporte contínuo para dúvidas  
 
 ### ✔️ Sistema de Usuários
