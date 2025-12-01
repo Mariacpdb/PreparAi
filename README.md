@@ -42,7 +42,7 @@ Este projeto foi desenvolvido por mim e meus colegas como uma solução completa
 ## 🏗️ Arquitetura do Projeto
 
 Organizado no modelo MVC adaptado:
-
+````
 A3/
 
 │
@@ -73,7 +73,7 @@ A3/
 
 └── README.md
 
-
+````
 
 ---
 
@@ -104,27 +104,35 @@ A3/
 ## ⚙️ Como Rodar o Projeto
 
 ### 1️⃣ Criar ambiente virtual
-```bash
+```
 python -m venv venv
 source venv/bin/activate  # Linux/Mac
 venv\Scripts\activate     # Windows
+```
+
+
 2️⃣ Instalar dependências
-bash
-Copiar código
+
+```
 pip install -r requirements.txt
+```
+
 3️⃣ Configurar variáveis de ambiente .env
-ini
-Copiar código
+
+````
 DB_HOST=localhost
 DB_PORT=5432
 DB_NAME=seu_banco
 DB_USER=postgres
 DB_PASS=senha
 OPENAI_API_KEY=xxxx
+````
+
 4️⃣ Rodar o backend
-bash
-Copiar código
+````
 python app.py
+````
+
 5️⃣ Abrir o frontend
 Basta abrir os arquivos HTML da pasta /view usando o Live Server no VS Code.
 
