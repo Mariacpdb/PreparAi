@@ -153,20 +153,13 @@ POST /chat – Chat com IA
 
 👥 Equipe do Projeto
 
-Maria Clara Palhares Diniz Braz - 123222699
-Breno Yohan Dantas de Oliveira - 123112963
-Cauan Silva Oliveira - 12410020
-Gabriel Henrique Martins - 1232020562
-Kaíky Pimentel Ferreira - 124113526
-Laysa Eduarda Moraes Serrão - 124114574
-Yris Gabrielle Sother Oliveira Pereira dos Reis - 12412380
+**Breno Yohan Dantas de Oliveira** - 123112963 <br>
+**Cauan Silva Oliveira** - 12410020 <br>
+**Gabriel Henrique Martins** - 1232020562 <br>
+**Kaíky Pimentel Ferreira** - 124113526 <br>
+**Laysa Eduarda Moraes Serrão** - 124114574 <br>
+**Maria Clara Palhares Diniz Braz** - 123222699 <br>
+**Yris Gabrielle Sother Oliveira Pereira dos Reis** - 12412380 <br>
 
 📚 Objetivo do Projeto
 Criar uma plataforma que realmente ajudasse estudantes a se prepararem para o ENEM de forma inteligente, prática e personalizada — combinando tecnologia, usabilidade e inteligência artificial.
-
-📄 Licença
-Projeto aberto para fins educacionais.
-
-
-
-
