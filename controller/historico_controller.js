@@ -8,13 +8,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     const lista = document.getElementById('lista-historico');
 
     try {
-        // Busca do Backend
         const res = await fetch(`http://localhost:5000/historico/${user.id}`);
         
         if (res.ok) {
             const dados = await res.json();
             
-            // Limpa mensagem de "Carregando..."
             lista.innerHTML = "";
 
             if (dados.length === 0) {
@@ -27,11 +25,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                 return;
             }
 
-            // Cria um card para cada item
             dados.forEach(item => {
                 const card = document.createElement('div');
                 if (item.categoria === 'SIMULADO') {
-                    // --- CARD DE SIMULADO (Azul) ---
                     card.className = 'history-card simulado';
                     card.innerHTML = `
                         <div class="card-info">
@@ -55,11 +51,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                             </div>
                         </div>
                     `;
-                    // Clique leva para revisão do simulado
+                 
                     card.onclick = () => window.location.href = `detalhes_simulado.html?id=${item.id}`;
 
                 } else {
-                    // --- CARD DE REDAÇÃO (Roxo/Laranja) ---
+                    
                     card.className = 'history-card redacao';
                     card.innerHTML = `
                         <div class="card-info">
@@ -75,7 +71,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                             </div>
                         </div>
                     `;
-                    // Clique leva para visualização da redação (Futuro)
+                   
                     card.onclick = () => window.location.href = `detalhes_redacao.html?id=${item.id}`;
                 }
                 
