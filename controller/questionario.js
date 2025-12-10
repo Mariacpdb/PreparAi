@@ -59,7 +59,6 @@ function finalizarQuestionario() {
     <p>Suas respostas foram registradas.</p>
   `;
 
-  // Enviar pro backend (exemplo)
   fetch("/api/salvar-questionario", {
     method: "POST",
     headers: { "Content-Type": "application/json" },

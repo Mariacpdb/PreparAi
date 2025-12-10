@@ -1,8 +1,3 @@
-/* ==========================
-   LAYOUT DA PÁGINA REDAÇÃO
-   ========================== */
-
-/* Fundo padrão cinza claro */
 body.redacao-page {
     background-color: #f8f9fa;
 }
@@ -11,8 +6,6 @@ body.redacao-page {
     width: 100%;
     max-width: 1000px;
     margin: 0 auto;
-    
-    /* Espaço essencial para o cabeçalho fixo não cobrir o conteúdo */
     padding-top: 40px; 
     padding-bottom: 50px;
     padding-left: 20px;
@@ -22,18 +15,15 @@ body.redacao-page {
     min-height: 80vh;
 }
 
-/* --- BLOCOS BRANCOS (CARDS) --- */
 section {
     background: #fff;
     padding: 2rem;
     margin-bottom: 30px;
     border-radius: 12px;
-    /* Sombra consistente com o resto do site */
     box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
     border: 1px solid rgba(0,0,0,0.05);
 }
 
-/* Cabeçalhos das Seções */
 .section-header {
     border-bottom: 1px solid #eee;
     padding-bottom: 15px;
@@ -41,7 +31,7 @@ section {
 }
 
 .section-header h2 {
-    color: #1d4e98; /* Azul principal */
+    color: #1d4e98;
     margin: 0;
     font-size: 1.5rem;
     font-weight: 700;
@@ -50,7 +40,6 @@ section {
     gap: 10px;
 }
 
-/* Área do Tema */
 .tema-content {
     text-align: center;
 }
@@ -66,13 +55,12 @@ section {
     margin-bottom: 20px;
 }
 
-/* --- ÁREA DE ESCRITA --- */
 textarea {
     width: 100%;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 8px;
-    font-size: 1.1rem; /* Fonte confortável para ler */
+    font-size: 1.1rem;
     font-family: inherit;
     resize: vertical;
     box-sizing: border-box;
@@ -88,7 +76,6 @@ textarea:focus {
     box-shadow: 0 0 0 3px rgba(29, 78, 152, 0.1);
 }
 
-/* Divisor "OU" */
 .divisor {
     text-align: center;
     margin: 30px 0;
@@ -107,14 +94,14 @@ textarea:focus {
     margin: 0 10px;
 }
 
-/* Upload de Imagem */
+
 .upload-area {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 10px;
     padding: 30px;
-    border: 2px dashed #d0d7de; /* Borda tracejada elegante */
+    border: 2px dashed #d0d7de;
     border-radius: 12px;
     background-color: #f9f9f9;
     transition: background-color 0.3s;
@@ -131,9 +118,8 @@ textarea:focus {
     font-style: italic;
 }
 
-/* Botões */
 .btn-primario {
-    background-color: #28a745; /* Verde para ação principal */
+    background-color: #28a745;
     color: white;
     padding: 15px 30px;
     border: none;
@@ -183,12 +169,12 @@ textarea:focus {
 
 .btn-upload:hover { background-color: #15386d; }
 
-/* --- RESULTADOS --- */
+
 .hidden { display: none; }
 
 .nota-final-banner {
     text-align: center;
-    background: #eef4fb; /* Azulzinho muito claro */
+    background: #eef4fb;
     padding: 30px;
     border-radius: 12px;
     margin-bottom: 30px;
@@ -212,7 +198,6 @@ textarea:focus {
     line-height: 1.6;
 }
 
-/* Grid de Competências */
 .competencias-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -250,7 +235,6 @@ textarea:focus {
     margin: 0;
 }
 
-/* Footer (Igual aos outros) */
 .practice-footer {
     text-align: center;
     padding: 2rem;
@@ -268,15 +252,14 @@ textarea:focus {
     min-height: 100vh;
 }
 
-/* O GRID MÁGICO: Divide a tela em Texto (65%) e Notas (35%) */
+
 .correction-grid {
     display: grid;
-    grid-template-columns: 2fr 1fr; /* 2 partes esquerda, 1 parte direita */
+    grid-template-columns: 2fr 1fr; 
     gap: 30px;
-    align-items: start; /* Alinha no topo */
+    align-items: start; 
 }
 
-/* Caixa do Texto do Aluno (Esquerda) */
 .student-text-box {
     background: white;
     padding: 40px;
@@ -286,15 +269,14 @@ textarea:focus {
 }
 
 #texto-completo {
-    white-space: pre-wrap; /* Mantém os parágrafos originais */
+    white-space: pre-wrap;
     line-height: 1.8;
     color: #2c3e50;
-    font-family: 'Georgia', 'Times New Roman', serif; /* Fonte estilo jornal/livro */
+    font-family: 'Georgia', 'Times New Roman', serif;
     font-size: 1.15rem;
     text-align: justify;
 }
 
-/* Painel de Notas (Direita) - Fica fixo ao rolar */
 .score-box {
     background: white;
     padding: 25px;
@@ -302,13 +284,13 @@ textarea:focus {
     box-shadow: 0 4px 20px rgba(0,0,0,0.08);
     border: 1px solid #e0e0e0;
     
-    position: sticky; /* Faz o painel seguir a tela */
+    position: sticky;
     top: 20px; 
     max-height: 90vh;
-    overflow-y: auto; /* Se a tela for pequena, cria barra de rolagem só na nota */
+    overflow-y: auto;
 }
 
-/* Nota Final Gigante */
+
 .nota-final-box {
     text-align: center;
     border-bottom: 2px solid #f0f0f0;
@@ -331,22 +313,20 @@ textarea:focus {
     margin-top: 5px;
 }
 
-/* Cores das Notas */
 .nota-verde { color: #28a745 !important; }
 .nota-amarela { color: #ffc107 !important;  }
 .nota-vermelha { color: #dc3545 !important; }
 
-/* Lista de Competências Detalhada */
 .competencias-list {
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
 
-/* Card de cada Competência */
+
 .comp-card {
     background: #f8f9fa;
-    border-left: 4px solid #1d4e98; /* Barrinha azul na esquerda */
+    border-left: 4px solid #1d4e98;
     border-radius: 6px;
     padding: 12px 15px;
     transition: transform 0.2s;
@@ -382,15 +362,38 @@ textarea:focus {
     line-height: 1.4;
 }
 
-/* Responsividade para Celular */
+.btn-voltar-padrao {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: #1d4e98;
+    background-color: white;
+    border: 1px solid #1d4e98;
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    margin-bottom: 15px;
+}
+
+.btn-voltar-padrao:hover {
+    background-color: #1d4e98;
+    color: white;
+    transform: translateX(-5px);
+    box-shadow: 0 4px 10px rgba(29, 78, 152, 0.2);
+}
+
+
 @media (max-width: 900px) {
     .correction-grid {
-        grid-template-columns: 1fr; /* Vira uma coluna só */
+        grid-template-columns: 1fr;
     }
     
     .score-box {
-        position: static; /* Para de seguir a tela no celular */
-        order: -1; /* Joga a nota para CIMA do texto no celular */
+        position: static; 
+        order: -1;
         margin-bottom: 30px;
     }
 }

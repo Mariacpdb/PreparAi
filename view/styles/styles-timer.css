@@ -1,0 +1,124 @@
+.timer-toggle-btn {
+    position: fixed;     
+    bottom: 30px;        
+    right: 30px;          
+    width: 65px;
+    height: 65px;
+    background-color: #1d4e98;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    cursor: pointer;
+    z-index: 99999;       
+    border: 3px solid white;
+    transition: transform 0.3s;
+}
+
+.timer-toggle-btn:hover {
+    transform: scale(1.1);
+    background-color: #003580;
+}
+
+.timer-panel {
+    position: fixed;
+    bottom: 110px;
+    right: 30px;
+    width: 320px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    border: 1px solid #e0e0e0;
+    z-index: 99999;
+    
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.timer-panel.active {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.timer-tabs {
+    display: flex;
+    background: #f1f3f5;
+    border-bottom: 1px solid #ddd;
+    border-radius: 15px 15px 0 0;
+    overflow: hidden;
+}
+
+.timer-tab {
+    flex: 1;
+    padding: 12px 5px;
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #666;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.timer-tab.active {
+    background: white;
+    color: #1d4e98;
+    border-bottom: 3px solid #1d4e98;
+}
+
+.timer-body {
+    padding: 25px 20px;
+    text-align: center;
+}
+
+.timer-display {
+    font-size: 4rem;
+    font-weight: 700;
+    color: #333;
+    font-family: 'Segoe UI', monospace;
+    margin: 10px 0;
+    line-height: 1;
+}
+
+.timer-status {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.status-foco { background: #e3effd; color: #1d4e98; }
+.status-pausa { background: #e6fffa; color: #00a884; }
+
+.timer-controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.btn-control {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+    color: white;
+}
+
+.btn-control:hover { transform: scale(1.1); }
+.btn-play { background: #28a745; }
+.btn-pause { background: #ffc107; }
+.btn-reset { background: #dc3545; }

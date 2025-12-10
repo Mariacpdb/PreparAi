@@ -1,4 +1,3 @@
-// controller/registro.js - VERSÃO CORRIGIDA DEFINITIVA
 
 const formRegistro = document.getElementById("registroForm");
 
@@ -10,7 +9,7 @@ if (formRegistro) {
         const email = document.getElementById("email").value;
         const senha = document.getElementById("senha").value;
 
-        // Debug para ver se pegou os dados
+       
         console.log("Enviando cadastro:", { nome, email, senha });
 
         if (!nome || !email || !senha) {
@@ -27,19 +26,15 @@ if (formRegistro) {
                 body: JSON.stringify({ nome, email, senha })
             });
 
-            // Se der erro (tipo email duplicado), o backend manda 400 ou 500
             if (!res.ok) {
                 const errorData = await res.json();
                 alert(errorData.error || 'Erro ao cadastrar usuário');
                 return;
             }
 
-            // SE CHEGOU AQUI, O CADASTRO DEU CERTO (Status 200-299)
-            // Não precisa checar 'data.status' aqui, porque o add_user retorna direto o usuário
             
             alert("Cadastro realizado com sucesso! Agora faça seu login.");
             
-            // Redireciona para a tela de LOGIN (index.html) e não para a home
             window.location.href = "index.html"; 
 
         } catch (err) {

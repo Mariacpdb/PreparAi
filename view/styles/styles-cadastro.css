@@ -1,54 +1,98 @@
 
 body.Cadastro {
-    min-height: 90vh;
-    position: relative;
-    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
-    background: linear-gradient(180deg, #f6fbff 0%, #ffffff 40%);
-    color: #08306b;
-    overflow-x: hidden;
+    background: linear-gradient(135deg, #eef2f3 0%, #d9e2ec 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    font-family: 'Poppins', 'Segoe UI', sans-serif;
+    color: #333;
 }
 
 .registro-container {
-    max-width: 420px;
+    background: white;
     width: 90%;
-    margin: 4rem auto 0 auto;
+    max-width: 420px;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 74, 173, 0.15);
     text-align: center;
-    padding: 2.5rem 1.5rem;
-    box-shadow: 0 6px 24px rgba(13,38,76,0.08);
-    border-radius: 10px;
-    background: rgba(255,255,255,0.8);
+    border-top: 5px solid #004aad; 
+    animation: slideUp 0.6s ease-out;
+}
+.registro-container h1 {
+    color: #1d4e98;
+    font-size: 1.8rem;
+    margin-bottom: 5px;
+    font-weight: 700;
 }
 
-.registro-container h1 {
-    margin: 0 0 0.5rem 0;
-    font-size: 2.4rem;
+.subtitle {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 30px;
+    display: block;
 }
 
 #registroForm {
     display: flex;
     flex-direction: column;
-    gap: 1.2rem;
-    margin-top: 1.4rem;
+    gap: 15px;
 }
 
-
-#registroForm input[type="text"],
-#registroForm input[type="email"],
-#registroForm input[type="password"] {
-    padding: 0.9rem 1rem;
-    border-radius: 8px;
-    border: none;
+#registroForm input {
+    padding: 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    font-size: 1rem;
+    background-color: #fafafa;
+    transition: all 0.3s;
     outline: none;
-    background: #1d4e98;
-    color: #fff;
-    font-size: 1
+    color: #333;
+}
+
+#registroForm input:focus {
+    border-color: #004aad;
+    background-color: #fff;
+    box-shadow: 0 0 0 4px rgba(0, 74, 173, 0.1);
 }
 
 .actions {
-    display: flex;
-    gap: 0.6rem;
-    justify-content: center;
-    margin-top: 0.25rem;
-    background: #1d4e98; color: #fff;
-    padding: 0.7rem 1rem; border-radius: 8px; border: none; cursor: pointer;
+    background-color: #004aad;
+    color: white;
+    padding: 15px;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 10px;
+}
+
+.actions:hover {
+    background-color: #003580;
+    transform: translateY(-2px);
+}
+
+.link-voltar {
+    display: inline-block;
+    margin-top: 20px;
+    color: #666;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s;
+}
+
+.link-voltar:hover {
+    color: #004aad;
+    text-decoration: underline;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }

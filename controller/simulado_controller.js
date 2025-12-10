@@ -1,7 +1,6 @@
 let questoesCache = [];
 let exameAtualId = null;
 
-// Função chamada pelo botão "Iniciar Simulado" no HTML
 async function iniciarProva() {
     const user = JSON.parse(localStorage.getItem('usuario'));
     if (!user) { alert("Faça login!"); window.location.href='index.html'; return; }
@@ -12,7 +11,6 @@ async function iniciarProva() {
     btn.disabled = true;
 
     try {
-        // 1. Cria o exame no banco
         const res1 = await fetch('http://localhost:5000/simulado/iniciar', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -22,16 +20,13 @@ async function iniciarProva() {
         
         if(res1.ok) {
             exameAtualId = data1.exame_id;
-            localStorage.setItem('exame_atual', exameAtualId); // Salva caso atualize a pagina
+            localStorage.setItem('exame_atual', exameAtualId); 
             
-            // 2. Busca as questões
             await carregarQuestoesDoBanco();
             
-            // 3. Troca a tela (Intro -> Prova)
             document.getElementById('tela-intro').classList.add('hidden');
             document.getElementById('tela-prova').classList.remove('hidden');
             
-            // Rola para o topo suavemente
             window.scrollTo({ top: 0, behavior: 'smooth' });
         } else {
             alert("Erro ao criar exame: " + data1.error);
@@ -54,24 +49,32 @@ async function carregarQuestoesDoBanco() {
         const res = await fetch('http://localhost:5000/simulado/questoes');
         questoesCache = await res.json();
 
-        area.innerHTML = ""; // Limpa loading
-
+        area.innerHTML = "";
         if (questoesCache.length === 0) {
             area.innerHTML = "<p>Nenhuma questão encontrada no banco.</p>";
             return;
         }
 
-        // Gera o HTML para cada questão (Usando o estilo do seu colega)
         questoesCache.forEach((q, index) => {
             const card = document.createElement('article');
-            card.className = 'question-card'; // Classe do CSS do colega
+            card.className = 'question-card';
 
-            // Gera as opções (A, B, C, D, E)
+            let textoSeguro = q.texto ? q.texto.replace(/\\/g, '\\\\') : "";
+            
+            // 2. Transforma delimitadores [ ] e ( ) em $$ e $ (caso tenha no banco)
+            textoSeguro = textoSeguro
+                .replace(/\\\[/g, '$$').replace(/\\\]/g, '$$')
+                .replace(/\\\(/g, '$').replace(/\\\)/g, '$');
+
+            // 3. Agora pode converter para HTML
+            const textoFormatado = window.marked ? 
+                DOMPurify.sanitize(marked.parse(textoSeguro)) : q.texto;
+
             let htmlOpcoes = '';
             ['A', 'B', 'C', 'D', 'E'].forEach(letra => {
-                // Procura a opção na lista que veio do banco
+
                 const opcaoObj = q.opcoes.find(o => o.letra === letra);
-                // Só mostra se tiver texto e não for 'null'
+                
                 if(opcaoObj && opcaoObj.texto && opcaoObj.texto !== 'null') {
                     htmlOpcoes += `
                         <li>
@@ -89,7 +92,7 @@ async function carregarQuestoesDoBanco() {
                     <h3 class="question-title">Questão ${index + 1} - ${q.materia}</h3>
                 </div>
                 <div class="question-body">
-                    <p class="question-text">${q.texto}</p>
+                    <div class="question-text">${textoFormatado}</div>
                     <ul class="options-list">
                         ${htmlOpcoes}
                     </ul>
@@ -97,6 +100,10 @@ async function carregarQuestoesDoBanco() {
             `;
             area.appendChild(card);
         });
+        
+        if (window.MathJax) {
+            window.MathJax.typesetPromise();
+        }
 
     } catch (e) {
         console.error(e);
@@ -107,7 +114,7 @@ async function carregarQuestoesDoBanco() {
 async function salvarResposta(questaoId, resposta) {
     if (!exameAtualId) return;
 
-    // Envia pro banco silenciosamente (sem travar a tela)
+
     await fetch('http://localhost:5000/simulado/responder', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -127,7 +134,7 @@ async function concluirProva() {
     btn.disabled = true;
 
     try {
-        // Chama a Procedure do banco para calcular tudo
+        
         const res = await fetch('http://localhost:5000/simulado/finalizar', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -138,7 +145,7 @@ async function concluirProva() {
 
         if (res.ok) {
             alert(`Simulado Finalizado!\n\nNota: ${resultado.nota}\nAcertos: ${resultado.acertos}\nErros: ${resultado.erros}`);
-            window.location.href = "desempenho.html"; // Vai para os gráficos
+            window.location.href = "desempenho.html";
         } else {
             alert("Erro ao finalizar: " + resultado.error);
         }

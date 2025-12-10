@@ -12,8 +12,26 @@
     <link rel="icon" type="image/svg+xml" href="img/favicon.svg" />
     <link rel="shortcut icon" href="img/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png" />
+
     <meta name="apple-mobile-web-app-title" content="PreparAI" />
     <link rel="manifest" href="img/site.webmanifest" />
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@2.4.0/dist/purify.min.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 
 <body class="practice-page">
@@ -56,6 +74,9 @@
             <div class="intro-text">
                 <h1>Revisão do Simulado</h1>
                 <p>Veja seus acertos e erros detalhados abaixo.</p>
+                <p class="data-simulado" style="color: #666; margin-top: 5px;">
+            Realizado em: <span id="data-exame-display">Carregando...</span>
+        </p>
                 <a href="historico.html" class="btn-secundario" style="text-decoration:none; padding: 10px 20px;">
                     <i class="fas fa-arrow-left"></i> Voltar para Histórico
                 </a>

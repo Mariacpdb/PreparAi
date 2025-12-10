@@ -1,81 +1,135 @@
-html.login-html, html, body { height: 100%; background: transparent; }
 
 body.login-page {
+    background: linear-gradient(135deg, #eef2f3 0%, #d9e2ec 100%);
     min-height: 100vh;
-    position: relative;
-    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
-    background: linear-gradient(360deg,#b4b4b4 0%, #ffffff 40%);
-    background-attachment: fixed;
-    background-size: cover;
-    color: #08306b;
-    overflow-x: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    font-family: 'Poppins', 'Segoe UI', sans-serif;
 }
 
 .login-container {
-    max-width: 420px;
+    background: white;
     width: 90%;
-    margin: 4rem auto 0 auto;
+    max-width: 400px;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 74, 173, 0.15);
     text-align: center;
-    padding: 2.5rem 1.5rem;
-    box-shadow: 0 6px 24px rgba(13,38,76,0.08);
-    border-radius: 10px;
-    background: rgba(0, 0, 0, 0.8);
+    border-top: 5px solid #004aad;
+    animation: fadeIn 0.8s ease-out;
 }
 
-.login-container h1 {
-    margin: 0 0 0.25rem 0;
-    font-size: 2.2rem;
+.login-container img {
+    max-width: 90px;     
+    width: 100%;
+    height: auto;
+    margin-bottom: 5px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    filter: drop-shadow(0 2px 4px rgba(29, 78, 152, 0.2));
 }
+
 .login-container h2 {
-    margin: 0 0 1.25rem 0;
-    font-weight: 400;
-    font-size: 1rem;
-    color: #cacaca;
+    color: #1d4e98;
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+    font-weight: 700;
 }
 
 .login-form {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 15px;
 }
 
-.login-form input[type="email"],
-.login-form input[type="password"] {
-    padding: 0.9rem 1rem;
-    border-radius: 8px;
-    border: none;
-    outline: none;
-    background: #1d4e98; 
-    color: #fff;
+.login-form input {
+    padding: 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
     font-size: 1rem;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+    background-color: #fafafa;
+    transition: all 0.3s;
+    outline: none;
 }
 
-.login-form input::placeholder { color: rgba(255,255,255,0.85); }
+.login-form input:focus {
+    border-color: #004aad;
+    background-color: #fff;
+    box-shadow: 0 0 0 4px rgba(0, 74, 173, 0.1);
+}
 
 .actions {
     display: flex;
-    gap: 0.6rem;
-    justify-content: center;
-    margin-top: 0.25rem;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
 }
 
-.btn { padding: 0.7rem 1rem; border-radius: 8px; border: none; cursor: pointer; }
-.btn-primary { background: #1d4e98; color: #fff; }
-.btn-secondary { background: #fff; color: #1d4e98; }
-.btn.ghost { background: transparent; color: #1d4e98; border: 2px solid rgba(29,78,152,0.12); }
+.btn.primary {
+    background-color: #004aad;
+    color: white;
+    padding: 15px;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.btn.primary:hover {
+    background-color: #003580;
+    transform: translateY(-2px);
+}
+
+a.btn.primary {
+    background-color: white;
+    color: #004aad;
+    border: 2px solid #004aad;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
+a.btn.primary:hover {
+    background-color: #eef4fb;
+    color: #003580;
+}
 
 .site-note {
-    position: absolute;
-    bottom: 12px;
-    left: 0;
-    width: 100%;
-    text-align: center;
-    color: #6b7280;
-    font-size: 0.95rem;
-    padding: 0 -1rem;
+    font-size: 0.8rem;
+    color: #888;
+    margin-top: 30px;
+    line-height: 1.5;
 }
 
-.sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+.logo-text {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #1d4e98;
+    margin-top: 0;
+    margin-bottom: 10px;
+    line-height: 1;
+    letter-spacing: -1px;
+}
 
-.debug-link { position: fixed; right: 12px; bottom: 12px; font-size: 0.85rem; color: #1d4e98; }
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 480px) {
+    .login-container {
+        padding: 30px 20px;
+        width: 85%;
+    }
+}

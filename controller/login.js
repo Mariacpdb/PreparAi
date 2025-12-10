@@ -22,7 +22,6 @@ if (form) {
             });
 
             
-            // Se a senha estiver errada, o Python manda 401
             if (!res.ok) {
                 const txt = await res.json();
                 alert(txt.error || 'Erro no login');
@@ -31,14 +30,11 @@ if (form) {
 
             const data = await res.json();
 
-            // === AQUI ESTAVA O ERRO ===
-            // Antes estava 'data.success', mas o Python manda 'status': 'ok'
             if (data.status === 'ok') {
-                // Salva o usuário no navegador
                 localStorage.setItem("usuario", JSON.stringify(data.user));
                 
                 alert("Login realizado com sucesso! Bem-vindo(a) " + data.user.nome);
-                window.location.href = "home.html"; // Redireciona para o chatbot
+                window.location.href = "home.html";
             } else {
                 alert(data.error || 'Login falhou');
             }

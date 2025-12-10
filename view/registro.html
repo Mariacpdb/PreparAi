@@ -3,33 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PreparAI - Criar Conta</title>
     <link rel="stylesheet" href="styles/styles.css">
     <link rel="stylesheet" href="styles/styles-cadastro.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="icon" type="image/png" href="img/books.png">
+    <link rel="icon" type="image/png" href="img/book_711189.png">
     <link rel="icon" type="image/png" href="img/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="img/favicon.svg" />
     <link rel="shortcut icon" href="img/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="PreparAI" />
     <link rel="manifest" href="img/site.webmanifest" />
-    <title>Registro</title>
-    <link rel="icon" type="image/png" href="img/book_711189.png">
 </head>
+
 <body class="Cadastro">
 
     <main class="registro-container">
+        <i class="fas fa-user-plus" style="font-size: 2.5rem; color: #004aad; margin-bottom: 10px;"></i>
+
         <h1>Crie Sua Conta</h1>
+        <span class="subtitle">Preencha os dados para começar a estudar</span>
+
         <form id="registroForm">
-    
-        <input type="text" id="nome" placeholder="Nome Completo" required>
-        <input type="email" id="email" placeholder="Email" required>
-        <input type="password" id="senha" placeholder="Senha" required>
+            <input type="text" id="nome" placeholder="Nome Completo" required>
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="password" id="senha" placeholder="Senha" required>
 
         <button class="actions" type="submit">Cadastrar</button>
     </form>
 
-    <script src="../controller/registro.js"></script>
+    <a href="index.html" class="link-voltar">
+            Já tem uma conta? <strong>Faça Login</strong>
+        </a>
+    
     </main>
+    
+    <script src="../controller/registro.js"></script>
 </body>
 </html>

@@ -8,10 +8,10 @@
     <link rel="stylesheet" href="styles/styles.css">
     <link rel="stylesheet" href="styles/styles-home.css">
     <link rel="stylesheet" href="styles/styles-chat.css">
-    
+    <link rel="stylesheet" href="styles/styles-timer.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="icon" type="image/png" href="img/book_711189.png">
 
+    <link rel="icon" type="image/png" href="img/book_711189.png">
     <link rel="icon" type="image/png" href="img/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="img/favicon.svg" />
     <link rel="shortcut icon" href="img/favicon.ico" />
@@ -21,6 +21,23 @@
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dompurify@2.4.0/dist/purify.min.js"></script>
+
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            },
+            startup: {
+                typeset: false
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 
 <body class="home-page">
@@ -42,7 +59,8 @@
 
         <div class="header-center">
             <div id="navigation-links">
-                <a href="home.html" class="active">INÍCIO</a> <a href="simulado.html">SIMULADO</a>
+                <a href="home.html" class="active">INÍCIO</a> 
+                <a href="simulado.html">SIMULADO</a>
                 <a href="redacao.html">REDAÇÃO</a>
                 <a href="desempenho.html">DESEMPENHO</a>
             </div>
@@ -66,6 +84,16 @@
         <div class="welcome-section">
             <h2 id="msg-bem-vindo">Olá, Estudante!</h2>
             <p id="dash-msg" class="subtitle">Carregando seus dados...</p>
+        </div>
+
+        <div class="recommendation-card" id="card-recomendacao" style="display: none;">
+            <div class="rec-icon">
+                <i class="fas fa-lightbulb"></i>
+            </div>
+            <div class="rec-content">
+                <h3 id="rec-titulo">Analisando seu perfil...</h3>
+                <p id="rec-texto">Carregando sugestões personalizadas de estudo baseadas no seu desempenho.</p>
+            </div>
         </div>
 
         <div class="kpi-container">
@@ -94,18 +122,36 @@
             </div>
         </div>
 
-        <div class="chat-area">
-            <div class="chat-messages" id="chatMessages"></div>
-            <div class="chat-input-wrapper">
-                <textarea id="chatInput" class="chat-input" placeholder="Digite sua pergunta..." rows="2"></textarea>
-                <button id="sendBtn" class="send-btn"><i class="fas fa-paper-plane"></i></button>
+        <div class="chat-container-wrapper">
+            
+            <aside class="chat-sidebar">
+                <div class="sidebar-header">
+                    <h3>Histórico</h3>
+                    <button onclick="criarNovoChat()" class="btn-new-chat" title="Nova Conversa">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                <div id="lista-sessoes" class="sessions-list">
+                    <div class="session-item active">Carregando...</div>
+                </div>
+            </aside>
+
+            <div class="chat-main-area">
+                <div class="chat-messages" id="chatMessages"></div>
+                
+                <div class="chat-input-wrapper">
+                    <textarea id="chatInput" class="chat-input" placeholder="Digite sua pergunta..." rows="1"></textarea>
+                    <button id="sendBtn" class="send-btn"><i class="fas fa-paper-plane"></i></button>
+                </div>
             </div>
+
         </div>
     </main>
 
     <script src="../controller/api.js"></script>
     <script src="../controller/home_controller.js"></script>
     <script src="../controller/chat.js"></script>
+    <script src="../controller/timer.js"></script>
     <script>
         function logout() {
             localStorage.removeItem('usuario');

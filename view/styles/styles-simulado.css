@@ -1,6 +1,3 @@
-/* ==========================
-   LAYOUT GERAL
-   ========================== */
 .practice-container {
     width: 100%;
     min-height: 80vh;
@@ -15,14 +12,10 @@
     padding: 1.5rem;
 }
 
-/* Utilitário para esconder telas */
 .hidden {
     display: none !important;
 }
 
-/* ==========================
-   TELA 1: INTRODUÇÃO (Tela de Iniciar)
-   ========================== */
 .intro-section {
     text-align: center;
     background: white;
@@ -74,13 +67,8 @@
     transform: scale(1.05);
 }
 
-/* ==========================
-   CABEÇALHO DA REVISÃO (O que faltava!)
-   ========================== */
 .intro-text {
     text-align: left;
-    
-    /* ESPAÇO GRANDE PARA NÃO FICAR COLADO */
     margin-bottom: 60px !important; 
     padding-bottom: 30px;
     border-bottom: 1px solid #e0e0e0;
@@ -88,7 +76,6 @@
 }
 
 .intro-text h1 {
-    /* FONTE CHIQUÉ */
     font-family: 'Poppins', sans-serif; 
     color: #1d4e98;
     font-size: 2.2rem;
@@ -103,7 +90,6 @@
     margin-bottom: 20px;
 }
 
-/* Botão de Voltar (Revisão) */
 .intro-text a {
     display: inline-flex;
     align-items: center;
@@ -124,9 +110,6 @@
     transform: translateX(-5px);
 }
 
-/* ==========================
-   TELA 2: PROVA (GRID DE QUESTÕES)
-   ========================== */
 .prova-header {
     display: flex;
     justify-content: space-between;
@@ -151,10 +134,9 @@
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: 2rem;
     margin-bottom: 30px;
-    margin-top: 20px; /* Garante que não cole no topo */
+    margin-top: 20px;
 }
 
-/* Card da Pergunta */
 .question-card {
     background: #fff;
     border-radius: 12px;
@@ -187,14 +169,13 @@
     line-height: 1.5;
 }
 
-/* LISTA DE OPÇÕES (Estilizada e Interativa) */
 .options-list {
     list-style: none;
     padding: 0;
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 12px; /* Espaço entre opções */
+    gap: 12px;
 }
 
 .options-list label {
@@ -203,7 +184,7 @@
     align-items: center;
     gap: 10px;
     width: 100%;
-    padding: 12px 15px; /* Mais gordinho */
+    padding: 12px 15px;
     border: 1px solid #eee;
     border-radius: 8px;
     transition: all 0.2s ease;
@@ -212,14 +193,14 @@
     background-color: white;
 }
 
-/* Efeito Hover (Azulzinho ao passar o mouse) */
+
 .options-list label:hover {
     background-color: #eef4fb;
     border-color: #1d4e98;
     transform: translateX(5px);
 }
 
-/* --- ESTILOS DE CORREÇÃO (REVISÃO) --- */
+
 .option-correct {
     background-color: #d4edda !important;
     border: 1px solid #28a745 !important;
@@ -233,12 +214,12 @@
     color: #721c24 !important;
 }
 
-/* Na revisão, tira a mãozinha mas mantem o visual */
+
 .options-list.readonly label {
     cursor: default;
 }
 
-/* Botão Finalizar */
+
 .action-area {
     text-align: right;
     margin-top: 40px;
@@ -260,7 +241,6 @@
 
 .btn-primary:hover { background: #218838; }
 
-/* Footer */
 .practice-footer {
     text-align: center;
     padding: 2rem;
@@ -270,3 +250,32 @@
 }
 
 .practice-footer a { color: #1d4e98; text-decoration: none; font-weight: bold; }
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+}
+
+#main-header {
+    flex-shrink: 0;
+}
+
+main, .home-container, .container-simulado, .redacao-container {
+    flex: 1 0 auto;
+    width: 100%;
+}
+footer {
+    flex-shrink: 0;
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    margin-top: auto;
+}
