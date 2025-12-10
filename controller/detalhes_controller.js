@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", async () => {
-    // 1. Pega o ID do exame lá da URL (ex: detalhes_simulado.html?id=10)
     const params = new URLSearchParams(window.location.search);
     const exameId = params.get('id');
 
@@ -10,38 +9,52 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     const area = document.getElementById('revisaoArea');
+    const dataDisplay = document.getElementById('data-exame-display');
 
     try {
         const res = await fetch(`http://localhost:5000/simulado/detalhes/${exameId}`);
-        const questoes = await res.json();
+        const dados = await res.json();
 
-        area.innerHTML = ""; // Limpa loading
+        if (dataDisplay) {
+            dataDisplay.innerText = dados.data || "Data desconhecida";
+        }
+
+        const questoes = dados.questoes || [];
+
+        area.innerHTML = ""; 
 
         questoes.forEach((q, index) => {
             const card = document.createElement('article');
             card.className = 'question-card';
 
-            // Gera as opções com lógica de cor
+            let enunciadoSeguro = q.enunciado ? q.enunciado.replace(/\\/g, '\\\\') : "";
+            
+            enunciadoSeguro = enunciadoSeguro
+                .replace(/\\\[/g, '$$').replace(/\\\]/g, '$$')
+                .replace(/\\\(/g, '$').replace(/\\\)/g, '$');
+
+            const enunciadoFormatado = window.marked ? 
+                DOMPurify.sanitize(marked.parse(enunciadoSeguro)) : q.enunciado;
+
+    
             let htmlOpcoes = '';
             ['A', 'B', 'C', 'D', 'E'].forEach(letra => {
                 if (q.opcoes[letra]) {
                     let classeCss = '';
                     let icone = '';
 
-                    // LÓGICA DAS CORES:
-                    
-                    // 1. Se essa é a correta -> SEMPRE VERDE
+                  
+                 
                     if (letra === q.gabarito) {
                         classeCss = 'option-correct';
                         icone = '<i class="fas fa-check" style="float:right; color:green;"></i>';
                     }
-                    // 2. Se o usuário marcou essa e estava ERRADA -> VERMELHO
+                
                     else if (letra === q.marcada && q.marcada !== q.gabarito) {
                         classeCss = 'option-wrong';
                         icone = '<i class="fas fa-times" style="float:right; color:red;"></i>';
                     }
 
-                    // Se o usuário marcou essa (mesmo sendo certa), deixamos o radio marcado
                     const checked = (letra === q.marcada) ? 'checked' : '';
 
                     htmlOpcoes += `
@@ -61,7 +74,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     <h3 class="question-title">Questão ${index + 1} - ${q.materia}</h3>
                 </div>
                 <div class="question-body">
-                    <p class="question-text">${q.enunciado}</p>
+                    <div class="question-text">${enunciadoFormatado}</div>
                     <ul class="options-list readonly">
                         ${htmlOpcoes}
                     </ul>
@@ -69,6 +82,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             `;
             area.appendChild(card);
         });
+
+        if (window.MathJax) {
+            window.MathJax.typesetPromise();
+        }
 
     } catch (e) {
         console.error(e);
