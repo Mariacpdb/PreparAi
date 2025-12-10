@@ -1,12 +1,12 @@
 const API_URL = "http://localhost:5000";
 
-// --- UTILITÁRIOS ---
+
 function getUsuario() {
     const u = localStorage.getItem('usuario');
     return u ? JSON.parse(u) : null;
 }
 
-// --- AUTH ---
+
 async function login(email, senha) {
     const res = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
@@ -21,7 +21,7 @@ async function login(email, senha) {
     return false;
 }
 
-// --- SIMULADO ---
+
 async function iniciarSimulado() {
     const u = getUsuario();
     if(!u) { alert("Faça login!"); window.location.href='index.html'; return; }
@@ -62,7 +62,6 @@ async function finalizarSimulado() {
     window.location.href = 'home.html';
 }
 
-// --- DASHBOARD ---
 async function carregarDashboardData(uid) {
     const res = await fetch(`${API_URL}/dashboard/resumo/${uid}`);
     return await res.json();
