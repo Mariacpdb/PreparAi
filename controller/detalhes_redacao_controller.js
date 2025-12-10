@@ -14,18 +14,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (res.ok) {
             const data = await res.json();
 
-            // 1. Cabeçalho
             document.getElementById('tema-titulo').innerText = data.tema;
             document.getElementById('data-envio').innerText = "Enviado em: " + data.data;
             
-            // 2. Texto da Redação
             document.getElementById('texto-completo').innerText = data.texto;
 
-            // 3. Nota Total Colorida
             const elNota = document.getElementById('nota-total-display');
             elNota.innerText = data.nota_total;
             
-            elNota.className = "nota-display"; // Reseta classes
+            elNota.className = "nota-display"; 
             if (data.nota_total > 700) {
                 elNota.classList.add('nota-verde');
             } else if (data.nota_total >= 500) {
@@ -33,14 +30,11 @@ document.addEventListener("DOMContentLoaded", async () => {
             } else {
                 elNota.classList.add('nota-vermelha');
             }
-            // 4. Feedback Geral
             document.getElementById('feedback-geral').innerText = data.feedback_geral || "Sem observações gerais.";
 
-            // 5. Lista de Competências (Com Detalhes!)
             const containerComp = document.querySelector('.competencias-list');
-            containerComp.innerHTML = ""; // Limpa lista antiga
+            containerComp.innerHTML = ""; 
 
-            // Mapeamento de nomes bonitos
             const nomesComp = {
                 'c1': 'Norma Culta',
                 'c2': 'Tema e Estrutura',
@@ -54,7 +48,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                 const texto = data.competencias_texto[key] || "Sem comentários específicos.";
                 const nome = nomesComp[key];
 
-                // Cria o HTML do Card
                 const cardHTML = `
                     <div class="comp-card">
                         <div class="comp-header">
