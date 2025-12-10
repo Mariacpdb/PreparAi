@@ -1,7 +1,6 @@
 import os
 import logging
 import json
-import base64
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
@@ -9,24 +8,23 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
 from urllib.parse import quote_plus
 from openai import OpenAI
-from sqlalchemy import text  # IMPORTANTE: Para rodar SQL puro (Procedures/Views)
+from sqlalchemy import text 
 
-# --- 1. CONFIGURAÇÕES INICIAIS ---
 load_dotenv()
 logging.basicConfig(level=logging.INFO)
 
 api_key = os.getenv("OPENAI_API_KEY")
 
 if api_key:
-    # Mostra os 5 primeiros letras da chave para você ver se carregou
+
     print(f"✅ SUCESSO: Chave de API carregada iniciando com: {api_key[:5]}...")
     client = OpenAI(api_key=api_key)
 else:
     print("❌ ERRO CRÍTICO: O Python NÃO achou a chave no .env!")
     client = None
-# ----------------------
 
-# Configuração da String de Conexão (Mantendo a lógica do seu time)
+
+
 def get_database_uri():
     database_url = os.getenv('DATABASE_URL')
     if database_url: return database_url
@@ -37,7 +35,7 @@ def get_database_uri():
     raw_user = os.getenv('DB_USER', 'postgres')
     raw_password = os.getenv('DB_PASS') or os.getenv('DB_PASSWORD') or ''
 
-    # Tratamento de caracteres especiais na senha
+
     try:
         user_enc = quote_plus(str(raw_user))
         name_enc = quote_plus(str(raw_name))
@@ -45,19 +43,19 @@ def get_database_uri():
     except Exception:
         user_enc, name_enc, password_enc = raw_user, raw_name, raw_password
 
-    # Força UTF8 para evitar erro com acentos
+
     options = '?options=-c%20client_encoding=UTF8'
     return f'postgresql+psycopg2://{user_enc}:{password_enc}@{host}:{port}/{name_enc}{options}'
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}}) # Libera geral
+CORS(app, resources={r"/*": {"origins": "*"}}) 
 
 app.config['SQLALCHEMY_DATABASE_URI'] = get_database_uri()
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-# --- 2. MODELO DE USUÁRIO (ORM) ---
+
 class Usuario(db.Model):
     __tablename__ = 'usuarios'
     id = db.Column(db.Integer, primary_key=True)
@@ -68,9 +66,6 @@ class Usuario(db.Model):
     def to_dict(self):
         return {'id': self.id, 'nome': self.nome, 'email': self.email}
 
-# ==============================================================================
-# 3. ROTAS DE AUTENTICAÇÃO (Mantido do seu time)
-# ==============================================================================
 
 @app.route('/')
 def index():
@@ -119,26 +114,22 @@ def login():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-# ==============================================================================
-# 4. ROTAS DO DASHBOARD (INTEGRAÇÃO COM AS VIEWS)
-# ==============================================================================
 
 @app.route('/dashboard/resumo/<int:usuario_id>', methods=['GET'])
 def get_dashboard_resumo(usuario_id):
     try:
-        # 1. Conta Simulados Finalizados (aqueles que têm nota)
+    
         sql_simulados = text("SELECT COUNT(*) FROM exames WHERE usuario_id = :uid AND nota_total IS NOT NULL")
         total_simulados = db.session.execute(sql_simulados, {'uid': usuario_id}).scalar() or 0
 
-        # 2. Conta Redações
+    
         sql_redacoes = text("SELECT COUNT(*) FROM redacoes WHERE usuario_id = :uid")
         total_redacoes = db.session.execute(sql_redacoes, {'uid': usuario_id}).scalar() or 0
 
-        # 3. Calcula Média Geral dos Simulados
+    
         sql_media = text("SELECT AVG(nota_total) FROM exames WHERE usuario_id = :uid AND nota_total IS NOT NULL")
         media_geral = db.session.execute(sql_media, {'uid': usuario_id}).scalar() or 0
 
-        # Mensagem motivacional simples
         msg = "Vamos praticar!"
         if total_simulados > 0:
             msg = f"Você já fez {total_simulados} simulados. Continue assim!"
@@ -157,7 +148,7 @@ def get_dashboard_resumo(usuario_id):
 @app.route('/dashboard/materias/<int:usuario_id>', methods=['GET'])
 def get_dashboard_materias(usuario_id):
     try:
-        # Busca dados detalhados por matéria
+    
         results = db.session.execute(text("SELECT * FROM dashboard_feedback_materias WHERE usuario_id = :uid"), {'uid': usuario_id}).fetchall()
         
         lista = []
@@ -171,17 +162,41 @@ def get_dashboard_materias(usuario_id):
         return jsonify(lista), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+    
+@app.route('/api/graficos/evolucao/<int:usuario_id>', methods=['GET'])
+def get_dados_grafico(usuario_id):
+    try:
+        sql = text("""
+            SELECT criado_em, nota_total 
+            FROM exames 
+            WHERE usuario_id = :uid AND nota_total IS NOT NULL
+            ORDER BY criado_em ASC
+        """)
+        
+        resultados = db.session.execute(sql, {'uid': usuario_id}).fetchall()
+        
+        labels = []
+        notas = []  
+        
+        for row in resultados:
+            if row.criado_em:
+                dia = row.criado_em.strftime('%d/%m')
+                labels.append(dia)
+                notas.append(float(row.nota_total))
+            
+        return jsonify({'labels': labels, 'notas': notas})
 
-# ==============================================================================
-# 5. ROTAS DE SIMULADO (USANDO A PROCEDURE MÁGICA)
-# ==============================================================================
+    except Exception as e:
+        print(f"Erro gráfico evolução: {e}")
+        return jsonify({'error': str(e)}), 500    
+
 
 @app.route('/simulado/iniciar', methods=['POST'])
 def iniciar_simulado():
     data = request.get_json()
     usuario_id = data.get('usuario_id')
     try:
-        # Cria um exame vazio
+    
         sql = text("INSERT INTO exames (usuario_id, tipo) VALUES (:uid, 'SIMULADO') RETURNING id")
         result = db.session.execute(sql, {'uid': usuario_id})
         db.session.commit()
@@ -192,7 +207,7 @@ def iniciar_simulado():
 @app.route('/simulado/questoes', methods=['GET'])
 def buscar_questoes():
     try:
-        # Busca 10 questões aleatórias (pode aumentar o LIMIT)
+    
         sql = text("""
             SELECT q.id, q.enunciado, q.alternativa_a, q.alternativa_b, 
                    q.alternativa_c, q.alternativa_d, q.alternativa_e, m.nome as materia
@@ -222,14 +237,14 @@ def buscar_questoes():
 
 @app.route('/simulado/responder', methods=['POST'])
 def responder_questao():
-    data = request.get_json() # {exame_id, questao_id, resposta}
+    data = request.get_json()
     try:
-        # Verifica gabarito
+        
         sql_gabarito = text("SELECT resposta_correta FROM questoes WHERE id = :qid")
         gabarito = db.session.execute(sql_gabarito, {'qid': data['questao_id']}).fetchone()[0]
         acertou = str(data['resposta']).upper() == str(gabarito).upper()
 
-        # Salva resposta
+        
         sql = text("""
             INSERT INTO exames_questoes (exame_id, questao_id, resposta_usuario, correta)
             VALUES (:eid, :qid, :resp, :correta)
@@ -246,12 +261,12 @@ def finalizar_simulado():
     data = request.get_json()
     exame_id = data.get('exame_id')
     try:
-        # AQUI ESTÁ O TRUNFO: Chama a procedure do banco!
+    
         sql_proc = text("SELECT fn_finalizar_exame(:eid)")
         db.session.execute(sql_proc, {'eid': exame_id})
         db.session.commit()
         
-        # Retorna o resultado calculado
+    
         sql_res = text("SELECT nota_total, acertos, erros FROM exames WHERE id = :eid")
         resultado = db.session.execute(sql_res, {'eid': exame_id}).fetchone()
         return jsonify({'nota': float(resultado.nota_total) if resultado.nota_total else 0, 'acertos': resultado.acertos, 'erros': resultado.erros}), 200
@@ -259,13 +274,19 @@ def finalizar_simulado():
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
     
-    # ==============================================================================
-# ROTA: DETALHES DO SIMULADO (REVISÃO)
-# ==============================================================================
+
 @app.route('/simulado/detalhes/<int:exame_id>', methods=['GET'])
 def get_detalhes_exame(exame_id):
     try:
-        # Busca as questões respondidas nesse exame
+
+        sql_exame = text("SELECT criado_em FROM exames WHERE id = :eid")
+        exame = db.session.execute(sql_exame, {'eid': exame_id}).fetchone()
+        
+        if not exame:
+            return jsonify({'error': 'Exame não encontrado'}), 404
+            
+        data_formatada = exame.criado_em.strftime('%d/%m/%Y às %H:%M') if exame.criado_em else "-"
+    
         sql = text("""
             SELECT 
                 q.enunciado, 
@@ -286,8 +307,8 @@ def get_detalhes_exame(exame_id):
             detalhes.append({
                 'enunciado': row.enunciado,
                 'materia': row.materia,
-                'marcada': row.resposta_usuario, # O que ele marcou (ex: 'A')
-                'gabarito': row.resposta_correta, # A certa (ex: 'C')
+                'marcada': row.resposta_usuario, 
+                'gabarito': row.resposta_correta, 
                 'opcoes': {
                     'A': row.alternativa_a,
                     'B': row.alternativa_b,
@@ -297,19 +318,21 @@ def get_detalhes_exame(exame_id):
                 }
             })
             
-        return jsonify(detalhes), 200
+        return jsonify({
+            'data': data_formatada,
+            'questoes': detalhes}), 200
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-# ==============================================================================
-# 6. ROTAS DE REDAÇÃO
-# ==============================================================================
 
 @app.route('/redacao/tema', methods=['GET'])
 def get_tema_redacao():
-    # Se não tiver API Key, usa backup
-    temas_backup = [
+    print("--- INICIANDO GERAÇÃO DE TEMA ---")
+   
+    def usar_backup(motivo):
+        print(f"⚠️ FALHA NA IA: {motivo}. Usando Backup.")
+        temas = [
         "Os desafios do combate à fome no Brasil",
         "A importância da preservação da Amazônia",
         "Impactos da inteligência artificial no mercado de trabalho",
@@ -318,87 +341,56 @@ def get_tema_redacao():
         "Desafios para a valorização de comunidades e povos tradicionais no Brasil",
         "Estigmas associados às doenças mentais na sociedade brasileira"
     ]
-
-    # Função auxiliar para retornar um backup
-    def retornar_backup(motivo):
         import random
-        escolhido = random.choice(temas_backup)
-        texto_padrao = "Este é um tema de backup gerado automaticamente pois a IA está indisponível no momento."
-        print(f"⚠️ Usando backup. Motivo: {motivo}")
-        return jsonify({'id': 1, 'tema': escolhido, 'texto_apoio': texto_padrao}), 200
+        return jsonify({
+            'id': 1, 
+            'tema': random.choice(temas), 
+            'texto_apoio': "Backup: IA indisponível."
+        }), 200
     
     if not client:
-        return retornar_backup("Sem API Key configurada")
+        return usar_backup("Sem API Key configurada")
     
     try:
-        # 1. Configura o Prompt
         prompt_sistema = """
-        VOCÊ É UM ASSISTENTE ESTRITAMENTE FOCADO NO ENEM.
-        VOCÊ NÃO É UMA WIKIPÉDIA. VOCÊ NÃO É O GOOGLE.
-
-        Sua única função é ensinar conteúdos curriculares do Ensino Médio.
-
-        PROTOCOLO DE RESPOSTA (Siga nesta ordem):
-
+        Você é um especialista no ENEM. Crie um tema de redação completo, inédito e busque textos de apoios para esse tema igual como o enem faz e disponibilize 3 para o usuario.
+        Retorne APENAS um JSON válido neste formato (sem markdown):
+        {
+            "tema": "Título do Tema",
+            "texto_apoio": "Texto motivador 1... Texto motivador 2... Texto motivador 3..."
+        }
+        """
         
-        FILTRO DE IDENTIDADE:
-        Se for "Oi", "Tudo bem", "Quem é você": Responda amigavelmente que você é o PreparAI, focado no ENEM.
-
-                
-        FILTRO DE CONTEÚDO (A LISTA BRANCA):
-        O assunto é Matemática, Física, Química, Biologia, História, Geografia, Filosofia, Sociologia, Português, Literatura ou Redação?
-        É uma figura HISTÓRICA relevante (ex: Napoleão, Getúlio Vargas, Platão)?-> SIM: Pode responder e ensinar.
-
-                
-        FILTRO DE BLOQUEIO (A LISTA NEGRA):
-        O assunto é: Futebol, Celebridades Vivas, Youtubers, Games, Receitas, Fofoca, Política atual (fora de contexto sociológico) ou Entretenimento?
-        A pergunta é "Quem é [Nome de Famoso/Jogador]"?-> AÇÃO IMEDIATA: RECUSE A RESPOSTA.-> DIGA: "Meu foco é exclusivo para matérias do ENEM. Não tenho permissão para falar sobre esportes, entretenimento ou celebridades. Vamos estudar algo?"
-
-                EXEMPLO PRÁTICO:
-                
-        User: "Quem é Neymar?" -> Bot: "Não falo sobre celebridades. Vamos estudar?" (BLOQUEAR)
-        User: "Quem foi Dom Pedro II?" -> Bot: "Foi o segundo imperador..." (RESPONDER)
-        User: "Fale sobre o Flamengo" -> Bot: "Não falo sobre futebol..." (BLOQUEAR)
-        NÃO TENTE CONTEXTUALIZAR O NEYMAR. APENAS BLOQUEIE."""
-        
-        # 2. Chama a OpenAI
         response = client.chat.completions.create(
             model="gpt-4o-mini", 
             messages=[{"role": "user", "content": prompt_sistema}],
             temperature=0.8
         )
-        
-        # 3. Processa o Retorno
         content = response.choices[0].message.content.replace("```json", "").replace("```", "").strip()
         dados_ia = json.loads(content)
 
-        # 4. Salva no Banco e pega o ID
-        # Adicionei 'RETURNING id' no final do SQL
-        sql_save = text("INSERT INTO temas_redacao (tema, texto_de_apoio, gerado_por_ia) VALUES (:tema, :apoio, TRUE) RETURNING id")
-        
-        result = db.session.execute(sql_save, {'tema': dados_ia['tema'], 'apoio': dados_ia['texto_apoio']})
-        novo_id = result.fetchone()[0] 
-        db.session.commit()
+        try:
+            sql_save = text("INSERT INTO temas_redacao (tema, texto_de_apoio, gerado_por_ia) VALUES (:tema, :apoio, TRUE) RETURNING id")
+            result = db.session.execute(sql_save, {'tema': dados_ia['tema'], 'apoio': dados_ia['texto_apoio']})
+            novo_id = result.fetchone()[0]
+            db.session.commit()
 
-        # 5. Retorna Sucesso com o ID correto
-        return jsonify({
-            'id': novo_id,
-            'tema': dados_ia['tema'], 
-            'texto_apoio': dados_ia['texto_apoio']
-        }), 200
+            print(f"✅ TEMA CRIADO COM SUCESSO: ID {novo_id}")
+
+        except Exception as e:
+            print(f"Aviso: erro ao salvar tema no histórico: {e}")
+
+        return jsonify({'id': novo_id, 'tema': dados_ia['tema'], 'texto_apoio': dados_ia['texto_apoio']}), 200
 
     except Exception as e:
-        # SE DER QUALQUER ERRO (IA ou Banco), usa o backup
-        return retornar_backup(f"Erro no processo: {str(e)}")
+        return usar_backup(f"Erro na API OpenAI: {str(e)}")
     
 @app.route('/redacao/gerar-tema', methods=['POST'])
 def gerar_tema_ia():
-    # Mesma lógica do GET, mantido para compatibilidade se seu front usar POST
+    
     return get_tema_redacao()
 
-# ==============================================================================
-# 2. ROTA: ENVIAR REDAÇÃO (Texto ou Imagem)
-# ==============================================================================
+
 @app.route('/redacao/enviar', methods=['POST'])
 def enviar_redacao():
     if not client: 
@@ -406,28 +398,33 @@ def enviar_redacao():
 
     data = request.get_json()
     usuario_id = data.get('usuario_id')
-    tema_id = data.get('tema_id')
+    tema_id_raw = data.get('tema_id')
     texto_usuario = data.get('texto') 
     imagem_base64 = data.get('imagem')
 
-    print(f"DEBUG: Recebido usuario_id={usuario_id}, tema_id={tema_id}") # Log para ajudar
+    print(f"DEBUG: Recebido usuario_id={usuario_id}, tema_id={tema_id_raw}")
 
     if not usuario_id:
         return jsonify({'error': 'Usuário não identificado. Faça login novamente.'}), 400
     
-    # Se tema_id for None, definimos um padrão (ex: 1) ou deixamos None se o banco aceitar NULL
-    try:
-        # --- PASSO 1: Buscar o Nome do Tema no Banco ---
-        titulo_tema = "Tema Livre / Não informado"
-        if tema_id:
-            # Tenta converter para int, caso venha como string do form
-            try:
-                tid = int(tema_id)
-                res_tema = db.session.execute(text("SELECT tema FROM temas_redacao WHERE id = :tid"), {'tid': tid}).fetchone()
-                if res_tema: titulo_tema = res_tema.tema
-            except: pass
-        else:
-            tema_id = 1
+    final_tema_id = 1
+    titulo_tema = "Tema Livre / Não informado"
+
+    if tema_id_raw:
+        try:
+            parsed_id = int(tema_id_raw)
+            final_tema_id = parsed_id
+            res_tema = db.session.execute(text("SELECT tema FROM temas_redacao WHERE id = :tid"), {'tid': final_tema_id}).fetchone()
+            if res_tema: titulo_tema = res_tema.tema
+            else:
+                print(f"AVISO: ID {final_tema_id} não encontrado no banco. Usando ID mas sem título específico.")
+        except ValueError:
+            print("ERRO: tema_id não é um número válido. Usando Backup (1).")
+            final_tema_id = 1
+    else:
+        print("AVISO: tema_id veio vazio ou nulo. Usando Backup (1).")
+
+    try:    
         prompt_sistema = """
         Atue como um corretor oficial do ENEM. Seja rigoroso e analise as 5 competências.
 
@@ -465,11 +462,11 @@ def enviar_redacao():
         }}
         """
 
-        # --- PASSO 3: Montar as Mensagens para a IA ---
+        
         mensagens_api = [{"role": "system", "content": prompt_sistema}]
 
         if imagem_base64:
-            # Cenário A: Imagem
+            
             mensagens_api.append({
                 "role": "user",
                 "content": [
@@ -477,35 +474,22 @@ def enviar_redacao():
                     {"type": "image_url", "image_url": {"url": imagem_base64}}
                 ]
             })
-            model_to_use = "gpt-4o-mini"  # Modelo com capacidade de visão
+            model_to_use = "gpt-4o-mini"  
         else:
             if not texto_usuario:
                  return jsonify({'error': 'Nenhum texto ou imagem fornecido.'}), 400
             mensagens_api.append({"role": "user", "content": f"Tema: '{titulo_tema}'.\nRedação:\n{texto_usuario}"})
             model_to_use = "gpt-4o-mini"
 
-        # --- PASSO 4: Chamada à OpenAI ---
-        # Usamos gpt-4o pois é o melhor para ler imagens (vision)
+
         response = client.chat.completions.create(model=model_to_use, messages=mensagens_api, temperature=0.4, max_tokens=4096)
 
-        # --- PASSO 5: Processar o Retorno ---
         conteudo_ia = response.choices[0].message.content
         resultado_ia = json.loads(conteudo_ia.replace("```json", "").replace("```", "").strip())
         situacao = resultado_ia.get('situacao_tema', 'OK').upper()
         texto_final = resultado_ia.get('texto_transcrito')
-        if not texto_final:
-            texto_final = texto_usuario
-        if not texto_final:
-            texto_final = " [ERRO: Texto não transcrito pela IA] "
-        uid_int = int(usuario_id)
-        tid_int = int(tema_id)
-        # --- PASSO 6: Salvar tudo no Banco (Transação) ---
-        
-        # A. Salva a Redação
-        sql_insert = text("INSERT INTO redacoes (usuario_id, tema_id, texto, enviado_em) VALUES (:uid, :tid, :txt, NOW()) RETURNING id")
-        rid = db.session.execute(sql_insert, {'uid': uid_int, 'tid': tid_int, 'txt': texto_final}).fetchone()[0]
-
-        # 2. Salva Notas
+        if not texto_final: texto_final = texto_usuario if texto_usuario else " [Texto Imagem] "
+    
         notas = resultado_ia.get('notas', {})
         if situacao == 'FUGA':
             print("🚨 FUGA DETECTADA: Zerando tudo.")
@@ -514,31 +498,29 @@ def enviar_redacao():
         
         elif situacao == 'TANGENTE':
             print("⚠️ TANGENCIAMENTO: Aplicando teto de 40 pontos.")
-            # Força as notas baixas antes de salvar no banco
+
             notas['c2'] = min(notas.get('c2', 0), 40)
             notas['c3'] = min(notas.get('c3', 0), 40)
             notas['c5'] = min(notas.get('c5', 0), 40)
             resultado_ia['comentario_geral'] = f"NOTA REBAIXADA. Você tangenciou o tema '{titulo_tema}'."
 
-        # Calcula soma para o insert final
         soma_total = sum(int(notas.get(f'c{i}', 0)) for i in range(1, 6))
 
-        # --- 4. SALVAMENTO NO BANCO ---
-        
-        # A. Cria Redação
-        rid = db.session.execute(text("""
+        sql_insert = text("""
             INSERT INTO redacoes (usuario_id, tema_id, texto, enviado_em) 
             VALUES (:uid, :tid, :txt, NOW()) RETURNING id
-        """), {'uid': usuario_id, 'tid': tema_id, 'txt': texto_final}).fetchone()[0]
+        """)
+    
+        rid = db.session.execute(sql_insert, {
+            'uid': int(usuario_id), 
+            'tid': final_tema_id, 
+            'txt': texto_final
+        }).fetchone()[0]
 
-        # B. Salva Competências (A TRIGGER DISPARA AQUI!)
-        # Como estamos salvando as notas JÁ PENALIZADAS (ex: 40), a trigger vai somar 40.
         for i in range(1, 6):
             db.session.execute(text("INSERT INTO redacoes_competencias (redacao_id, competencia, nota) VALUES (:rid, :comp, :n)"), 
                                {'rid': rid, 'comp': i, 'n': int(notas.get(f'c{i}', 0))})
 
-        # C. Salva Avaliação Final
-        # Enviamos 'soma_total' para satisfazer o NOT NULL, mas o valor é igual ao da trigger.
         json_str = json.dumps(resultado_ia)
         
         db.session.execute(text("""
@@ -553,6 +535,8 @@ def enviar_redacao():
         return jsonify({
             'message': 'Sucesso',
             'id': rid,
+            'tema_usado': titulo_tema,
+            'tema_id_usado': final_tema_id,
             'nota_total': soma_total,
             'notas_por_competencia': notas,
             'comentario_geral': resultado_ia.get('comentario_geral'),
@@ -564,24 +548,17 @@ def enviar_redacao():
         print(f"ERRO: {e}")
         return jsonify({'error': str(e)}), 500
     
-# ==============================================================================
-# ROTA: HISTÓRICO UNIFICADO (CORREÇÃO FINAL)
-# ==============================================================================
-# ==============================================================================
-# ROTA: HISTÓRICO (COM CORREÇÃO DE DATAS/TIMEZONE)
-# ==============================================================================
 @app.route('/historico/<int:usuario_id>', methods=['GET'])
 def get_historico(usuario_id):
     historico_geral = []
     
-    # Função para remover fuso horário e evitar o erro de comparação
     def limpar_fuso(dt):
         if dt and hasattr(dt, 'replace'):
             return dt.replace(tzinfo=None)
         return dt
 
     try:
-        # --- 1. BUSCA SIMULADOS ---
+
         try:
             sql_simulados = text("""
                 SELECT id, criado_em, tipo, nota_total, acertos, erros 
@@ -591,7 +568,7 @@ def get_historico(usuario_id):
             res_sim = db.session.execute(sql_simulados, {'uid': usuario_id}).fetchall()
 
             for row in res_sim:
-                # Limpa o fuso horário antes de salvar
+
                 data_banco = limpar_fuso(row.criado_em)
                 
                 historico_geral.append({
@@ -606,7 +583,6 @@ def get_historico(usuario_id):
         except Exception as e_sim:
             print(f"⚠️ Erro ao buscar Simulados: {e_sim}")
 
-        # --- 2. BUSCA REDAÇÕES ---
         try:
             sql_redacoes = text("""
                 SELECT 
@@ -625,7 +601,6 @@ def get_historico(usuario_id):
             for row in res_red:
                 tema_nome = row.tema if row.tema else "Tema Livre"
                 
-                # Limpa o fuso horário aqui também
                 data_obj = limpar_fuso(row.enviado_em)
                 
                 data_formatada = data_obj.strftime('%d/%m/%Y às %H:%M') if data_obj else "Data desc."
@@ -642,7 +617,6 @@ def get_historico(usuario_id):
         except Exception as e_red:
             print(f"⚠️ Erro ao buscar Redações: {e_red}")
 
-        # 3. ORDENAÇÃO (Agora vai funcionar pois todas as datas estão limpas)
         itens_validos = [x for x in historico_geral if x.get('data_raw')]
         
         itens_validos.sort(key=lambda x: x['data_raw'], reverse=True)
@@ -659,7 +633,7 @@ def get_historico(usuario_id):
 @app.route('/redacao/detalhes/<int:redacao_id>', methods=['GET'])
 def get_detalhes_redacao(redacao_id):
     try:
-        # 1. Busca dados gerais (Texto, Tema, Nota Final, Comentário)
+
         sql_geral = text("""
             SELECT 
                 r.texto, 
@@ -678,7 +652,6 @@ def get_detalhes_redacao(redacao_id):
         if not geral:
             return jsonify({'error': 'Redação não encontrada'}), 404
 
-        # 2. Busca notas por competência
         sql_comp = text("SELECT competencia, nota FROM redacoes_competencias WHERE redacao_id = :rid ORDER BY competencia")
         comps = db.session.execute(sql_comp, {'rid': redacao_id}).fetchall()
         notas_comp = {f"c{c.competencia}": c.nota for c in comps}
@@ -709,65 +682,254 @@ def chat():
     if not client: return jsonify({'error': 'Sem API KEY'}), 500
     
     data = request.get_json()
-    usuario_id = data.get('usuario_id') # IMPORTANTE: Front tem que mandar isso agora 
+    usuario_id = data.get('usuario_id') 
     msg_usuario = data.get('message')
     historico = data.get('history', [])
     
-    
     try:
         sessao_id = None
-        
-        # 1. Se tem usuário, salva no banco
+
         if usuario_id:
-            # Tenta achar sessão aberta
+
             res = db.session.execute(text("SELECT id FROM chat_sessoes WHERE usuario_id=:uid AND finalizado_em IS NULL LIMIT 1"), {'uid': usuario_id}).fetchone()
             if res:
                 sessao_id = res[0]
             else:
-                # Cria nova
                 new_s = db.session.execute(text("INSERT INTO chat_sessoes (usuario_id) VALUES (:uid) RETURNING id"), {'uid': usuario_id})
                 sessao_id = new_s.fetchone()[0]
                 db.session.commit()
 
-            # Salva msg do user
             db.session.execute(text("INSERT INTO chat_mensagens (sessao_id, usuario_id, remetente, mensagem) VALUES (:sid, :uid, 'user', :msg)"), 
                                {'sid': sessao_id, 'uid': usuario_id, 'msg': msg_usuario})
             db.session.commit()
 
-        # 2. Chama OpenAI
+        prompt_sistema = """
+        VOCÊ É O PREPARAI, UM TUTOR ESPECIALIZADO NO ENEM E ENSINO MÉDIO.
+        Sua missão é auxiliar estudantes com explicações didáticas, resolução de questões e contextualização de matérias..
+
+        DIRETRIZ MESTRA (O "VIÉS ACADÊMICO"):
+        Você deve analisar a INTENÇÃO da pergunta do usuário.
+        - Assuntos gerais (tecnologia, esportes, música, cultura pop, entre outros...) SÓ SÃO PERMITIDOS se forem abordados sob uma ótica acadêmica, histórica, sociológica, física ou biológica.
+        - Assuntos com viés de consumo, fofoca, opinião pessoal, preços ou entretenimento puro DEVEM SER RECUSADOS educadamente.
+
+        EXEMPLOS DE COMPORTAMENTO (USE COMO REGRA):
+
+        Caso 1: Tecnologia (Contexto Comercial - PROIBIDO)
+        Usuário: "Quanto custa o notebook Dell mais recente?"
+        PreparAI: "Meu foco é o ENEM e conteúdos educacionais. Não forneço informações de preços ou recomendações de compras. Mas posso te explicar como funciona o processador dele se quiser estudar informática!"
+
+        Caso 2: Tecnologia (Contexto Educacional - PERMITIDO)
+        Usuário: "Como a evolução dos computadores impactou o mercado de trabalho?"
+        PreparAI: (Explica sobre Revolução Técnico-Científica-Informacional, Globalização e Sociologia do Trabalho).
+
+        Caso 3: Esportes (Contexto Fofoca - PROIBIDO)
+        Usuário: "O Neymar jogou bem ontem?"
+        PreparAI: "Eu sou um assistente focado nos estudos para o ENEM. Não acompanho notícias de jogos ou celebridades. Vamos voltar para os estudos?"
+
+        Caso 4: Esportes (Contexto Físico/Biológico - PERMITIDO)
+        Usuário: "Qual a física por trás do chute de curva no futebol?"
+        PreparAI: (Explica sobre o Efeito Magnus, dinâmica de fluidos e vetores).
+
+        Caso 5: Sentimental/Pessoal (PROIBIDO)
+        Usuário: "Estou me sentindo muito triste hoje."
+        PreparAI: "Sinto muito que esteja assim. Como sou uma IA focada em ensino, não posso oferecer conselhos pessoais, mas sugiro que procure apoio de amigos ou profissionais. Se quiser distrair a mente estudando, estou aqui."
+
+        REGRAS DE RESPOSTA:
+        1. Seja didático, objetivo e use linguagem adequada ao Ensino Médio.
+        2. Se a pergunta for recusada, sugira um tema correlato que seja educacional.
+        3. NUNCA saia do personagem. Você não é o ChatGPT, você é o PreparAI.
+
+        REGRAS DE MATEMÁTICA (CRÍTICO):
+        1. Use SEMPRE o cifrão ($) para fórmulas. NUNCA use [ ] ou ( ).
+        2. ESCAPE TODAS AS BARRAS INVERTIDAS.
+           - Errado: \frac{a}{b}
+           - Certo: \\frac{a}{b}  (Use duas barras!)
+        
+        Exemplo Inline: $ E = mc^2 $
+        Exemplo Bloco: $$ x = \\frac{-b \\pm \\sqrt{\\Delta}}{2a} $$
+        """
+
+        messages_payload = [{"role": "system", "content": prompt_sistema}] + historico + [{"role": "user", "content": msg_usuario}]
+        
         response = client.chat.completions.create(
             model="gpt-4o-mini",
-            messages=[{"role": "system", "content": "Você é o PreparAI, um assistente educativo."}] + historico + [{"role": "user", "content": msg_usuario}]
+            messages=messages_payload,
+            temperature=0.5 
         )
         ai_reply = response.choices[0].message.content
 
-
-        # 3. Pós-processamento: bloqueia respostas sobre tópicos fora do ENEM (ex: celebridades)
-        try:
-            import re
-            forbidden = [r"\bculinaria\b", r"\besporte\b", r"\bpalavroes\b" r"\bcelebridade\b", r"\byoutuber\b", r"\bformula1\b", r"\bchurrasco\b", r"\btecnologia\b", r"\bbem-estar\b", r"\bsaude\b", r"\bjogos\b",r"\bvideo-games\b", r"\bworld-of-warcraft\b", r"\bWoW\b", r"\bftc\b", r"\bfifa\b", r"\bnfl\b", r"\bnba\b", r"\bcelebridades\b", r"\bfilmes\b", r"\bseries\b", r"\bpolitica atual\b"]
-            ai_lower = ai_reply.lower() if isinstance(ai_reply, str) else ''
-            blocked = any(re.search(pat, ai_lower, flags=re.IGNORECASE) for pat in forbidden)
-        except Exception:
-            blocked = False
-
-        if blocked:
-            # Mensagem padrão de recusa (conforme regras ENEM)
-            ai_reply = "Meu foco é exclusivo para matérias do ENEM. Não tenho permissão para falar sobre esportes, entretenimento ou celebridades. Vamos estudar algo?"
-
-        # 4. Salva resposta da IA
         if sessao_id:
             db.session.execute(text("INSERT INTO chat_mensagens (sessao_id, usuario_id, remetente, mensagem) VALUES (:sid, :uid, 'bot', :msg)"), 
                                {'sid': sessao_id, 'uid': usuario_id, 'msg': ai_reply})
             db.session.commit()
 
         return jsonify({'reply': ai_reply})
+    
+    except Exception as e:
+        print(f"ERRO CHAT: {e}") 
+        return jsonify({'error': str(e)}), 500
+    
+@app.route('/api/chat/sessoes/<int:usuario_id>', methods=['GET'])
+def get_usuario_sessoes(usuario_id):
+    try:
+        sql = text("""
+            SELECT s.id, s.iniciado_em, 
+                   (SELECT mensagem FROM chat_mensagens WHERE sessao_id = s.id ORDER BY id ASC LIMIT 1) as resumo
+            FROM chat_sessoes s
+            WHERE s.usuario_id = :uid
+            ORDER BY s.iniciado_em DESC
+        """)
+        
+        result = db.session.execute(sql, {'uid': usuario_id}).fetchall()
+        
+        sessoes = []
+        for row in result:
+            titulo = row.resumo if row.resumo else "Nova Conversa"
+            if len(titulo) > 30: titulo = titulo[:27] + "..."
+            
+            sessoes.append({
+                'id': row.id,
+                'data': row.iniciado_em.strftime('%d/%m %H:%M'),
+                'titulo': titulo
+            })
+            
+        return jsonify(sessoes), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+@app.route('/api/chat/novo', methods=['POST'])
+def novo_chat_sessao():
+    data = request.get_json()
+    usuario_id = data.get('usuario_id')
+    
+    try:
+        db.session.execute(text("UPDATE chat_sessoes SET finalizado_em = NOW() WHERE usuario_id = :uid AND finalizado_em IS NULL"), {'uid': usuario_id})
+        
+        sql_new = text("INSERT INTO chat_sessoes (usuario_id) VALUES (:uid) RETURNING id")
+        new_id = db.session.execute(sql_new, {'uid': usuario_id}).fetchone()[0]
+        db.session.commit()
+        
+        return jsonify({'message': 'Nova sessão criada', 'sessao_id': new_id}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500    
+
+
+@app.route('/api/chat/historico/<int:usuario_id>', methods=['GET'])
+def get_chat_historico(usuario_id):
+    sessao_id = request.args.get('sessao_id')
+
+    try:
+        if sessao_id:
+            sql = text("""
+                SELECT remetente, mensagem, enviado_em 
+                FROM chat_mensagens 
+                WHERE sessao_id = :sid AND usuario_id = :uid
+                ORDER BY enviado_em ASC
+            """)
+        
+            params = {'sid': sessao_id, 'uid': usuario_id}
+        else:
+            sql = text("""
+                SELECT m.remetente, m.mensagem, m.enviado_em 
+                FROM chat_mensagens m
+                JOIN chat_sessoes s ON m.sessao_id = s.id
+                WHERE s.usuario_id = :uid AND s.finalizado_em IS NULL
+                ORDER BY m.enviado_em ASC
+            """)
+            params = {'uid': usuario_id}
+        
+        result = db.session.execute(sql, params).fetchall()
+        
+        historico = []
+        for row in result:
+            role_openai = 'user' if row.remetente == 'user' else 'assistant'
+            historico.append({
+                'role': role_openai,
+                'content': row.mensagem,
+                'data': row.enviado_em.strftime('%d/%m %H:%M') if row.enviado_em else ''
+            })
+            
+        return jsonify(historico), 200
 
     except Exception as e:
-        print("\n\n🔥 ERRO FATAL NA OPENAI (LEIA ABAIXO) 🔥")
+        print(f"Erro ao buscar histórico do chat: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/dashboard/recomendacao/<int:usuario_id>', methods=['GET'])
+def get_recomendacao_estudos(usuario_id):
+    if not client: return jsonify({'error': 'Sem IA'}), 500
+
+    try:
+        sql = text("""
+            SELECT 
+                m.nome as materia,
+                COUNT(*) as total_questoes,
+                SUM(CASE WHEN eq.correta = TRUE THEN 1 ELSE 0 END) as acertos
+            FROM exames_questoes eq
+            JOIN exames e ON eq.exame_id = e.id
+            JOIN questoes q ON eq.questao_id = q.id
+            JOIN materias m ON q.materia_id = m.id
+            WHERE e.usuario_id = :uid
+            GROUP BY m.nome
+        """)
+        
+        resultados = db.session.execute(sql, {'uid': usuario_id}).fetchall()
+        
+        if not resultados:
+            return jsonify({
+                'titulo': 'Comece a Praticar!',
+                'texto': 'Ainda não tenho dados suficientes. Faça seu primeiro simulado para eu analisar seus pontos fortes e fracos!'
+            })
+
+        pior_materia = None
+        menor_taxa = 101.0
+        
+        for row in resultados:
+            if row.total_questoes < 3: continue
+            
+            taxa = (row.acertos / row.total_questoes) * 100
+            if taxa < menor_taxa:
+                menor_taxa = taxa
+                pior_materia = row.materia
+
+        if not pior_materia:
+            return jsonify({
+                'titulo': 'Continue Assim!',
+                'texto': 'Seus dados iniciais estão ótimos. Continue fazendo simulados para refinarmos a análise.'
+            })
+        
+        prompt = f"""
+        Aja como um mentor pedagógico experiente do ENEM.
+        O aluno está com dificuldade crítica em: {pior_materia} (Aproveitamento de apenas {menor_taxa:.1f}%).
+        
+        Gere um conselho curto e direto (máximo 3 frases) sugerindo um tópico chave dessa matéria que costuma cair muito no ENEM e como estudar ele.
+        Não use saudações. Vá direto ao ponto. Ex: "Em Matemática, foque em Regra de Três..."
+        """
+        
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.7,
+            max_tokens=100
+        )
+        
+        conselho_ia = response.choices[0].message.content
+
+        return jsonify({
+            'titulo': f'Foco em {pior_materia} 🎯',
+            'texto': conselho_ia
+        })
+
+    except Exception as e:
+        print(f"Erro recomendação: {e}")
+        return jsonify({'texto': 'Não foi possível gerar a recomendação agora.'}), 500
+
+
+    except Exception as e:
+        print("\n\n🔥 ERRO FATAL NA OPENAI🔥")
         print(f"TIPO DO ERRO: {type(e)}")
         print(f"MENSAGEM: {e}")
-        print("🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥\n\n")
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
